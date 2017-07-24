@@ -1,0 +1,15 @@
+#ifndef PLAINTEXTEDIT_H
+#define PLAINTEXTEDIT_H
+#include <QPlainTextEdit>
+
+class PlainTextEdit : public QPlainTextEdit
+{
+    Q_OBJECT
+public:
+    explicit PlainTextEdit(QWidget *parent = Q_NULLPTR) : QPlainTextEdit(parent) {}
+
+protected:
+    void mousePressEvent(QMouseEvent *event);
+};
+
+#endif // PLAINTEXTEDIT_H
