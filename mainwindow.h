@@ -52,6 +52,7 @@ private:
     QBrush getDefaultBackgroungColor();
     void highlightCurrentLine();
     void setAlwaysOnTop();
+    void setPlainTextFromFile();
 };
 
 #endif // MAINWINDOW_H

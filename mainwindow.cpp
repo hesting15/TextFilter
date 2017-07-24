@@ -23,12 +23,11 @@ MainWindow::MainWindow(QWidget *parent) :
     mMemo.loadFile(mSettings.getFilename());
 
     ui->plainTextEdit->setFont(mSettings.getFont());
-    ui->plainTextEdit->setPlainText(mMemo.getText());
+    setPlainTextFromFile();
 }
 
 MainWindow::~MainWindow()
 {
-
     delete ui;
 }
 
@@ -46,11 +45,8 @@ void MainWindow::on_lineEditSearch_textChanged(const QString &filter)
         mMemo.setText(ui->plainTextEdit->toPlainText());
     }
     else if (filter.isEmpty())
-    {
-        mIsFiltering = false;
-        ui->plainTextEdit->setPlainText(mMemo.getText());
-        ui->toolButtonPrevious->setEnabled(false);
-        ui->toolButtonNext->setEnabled(false);
+    {        
+        setPlainTextFromFile();
         return;
     }
 
@@ -69,7 +65,20 @@ void MainWindow::on_lineEditSearch_textChanged(const QString &filter)
     ui->toolButtonNext->setEnabled(mFilteredLines.size()>0);
 }
 
+void MainWindow::setPlainTextFromFile()
+{
+    mIsFiltering = false;
+    ui->lineEditSearch->clear();
+    ui->toolButtonPrevious->setEnabled(false);
+    ui->toolButtonNext->setEnabled(false);
 
+    QTextCursor cursor(ui->plainTextEdit->document());
+    QTextCharFormat fmt;
+    fmt.setBackground(getDefaultBackgroungColor());
+    cursor.setCharFormat(fmt);
+    ui->plainTextEdit->setTextCursor(cursor);
+    ui->plainTextEdit->setPlainText(mMemo.getText());
+}
 
 void MainWindow::createMenuActions()
 {
@@ -174,7 +183,7 @@ bool MainWindow::event(QEvent *event)
     if (event->type() == QEvent::WindowActivate)
     {
         // When window is set to "Always On Top", in some cases MainWindows
-        // stays on top the QMenu. To fix it, I recreate a menu
+        // stays above QMenu. To fix it, I recreate a menu
         createMenuActions();
     }
     return QWidget::event(event);
@@ -195,11 +204,10 @@ void MainWindow::loadFile(const QString &filename)
         return;
     }
 
-    mIsFiltering = false;
     ui->lineEditSearch->clear();
 
     mMemo.loadFile(filename);
-    ui->plainTextEdit->setPlainText(mMemo.getText());
+    setPlainTextFromFile();
     mSettings.setFilename(filename);
 }
 
@@ -341,7 +349,6 @@ void MainWindow::on_toolButtonNext_clicked()
 
 void MainWindow::highlightCurrentLine()
 {
-
     FilteredLine filteredLine = mFilteredLines[mCurrentFilteredLineNumber];
     QTextCursor cursor(ui->plainTextEdit->document()->findBlockByLineNumber(filteredLine.lineNumber));
 
