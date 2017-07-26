@@ -15,9 +15,26 @@ void PlainTextEdit::mousePressEvent(QMouseEvent *event)
         cursor.select(QTextCursor::LineUnderCursor);
         setTextCursor(cursor);
         copy();
+        return;
     }
-    else
+
+    QPlainTextEdit::mousePressEvent(event);
+}
+
+void PlainTextEdit::wheelEvent(QWheelEvent *event)
+{
+    if (QApplication::keyboardModifiers().testFlag(Qt::ControlModifier))
     {
-        QPlainTextEdit::mousePressEvent(event);
+        if(event->delta() > 0)
+        {
+            zoomIn(2);
+        }
+        else
+        {
+            zoomOut(2);
+        }
+        return;
     }
+
+    QPlainTextEdit::wheelEvent(event);
 }

@@ -22,6 +22,10 @@ protected:
     void closeEvent(QCloseEvent *event);
 private slots:
     void on_lineEditSearch_textChanged(const QString &arg1);
+    void on_lineEditSearch_returnPressed();
+    void on_toolButtonPrevious_clicked();
+    void on_toolButtonNext_clicked();
+
     void filterTextAction();
     void copyLineAction();
     void changeFontAction();
@@ -31,12 +35,6 @@ private slots:
     void saveFileAction();
     void saveFileAsAction();
     void helpAction();
-
-    void on_lineEditSearch_returnPressed();
-
-    void on_toolButtonPrevious_clicked();
-
-    void on_toolButtonNext_clicked();
 
 private:
     Ui::MainWindow *ui;

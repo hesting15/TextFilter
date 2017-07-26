@@ -10,6 +10,7 @@ public:
 
 protected:
     void mousePressEvent(QMouseEvent *event);
+    void wheelEvent(QWheelEvent *event);
 };
 
 #endif // PLAINTEXTEDIT_H

@@ -34,6 +34,7 @@ MainWindow::~MainWindow()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     mSettings.setWindowGeometry(saveGeometry());
+    mSettings.setFont( ui->plainTextEdit->font());
     QMainWindow::closeEvent(event);
 }
 
