@@ -13,7 +13,7 @@ struct FilteredLine
 class Memo
 {
 public:
-    Memo(){}
+    Memo();
 
     void setText(const QString& text) { mText = text; }
     QString getText() { return mText; }

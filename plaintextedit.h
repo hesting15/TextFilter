@@ -5,8 +5,9 @@
 class PlainTextEdit : public QPlainTextEdit
 {
     Q_OBJECT
+
 public:
-    explicit PlainTextEdit(QWidget *parent = Q_NULLPTR) : QPlainTextEdit(parent) {}
+    explicit PlainTextEdit(QWidget *parent = Q_NULLPTR);
 
 protected:
     void mousePressEvent(QMouseEvent *event);

@@ -5,6 +5,11 @@
 #include <QTextBlock>
 #include <QToolTip>
 #include <QScrollBar>
+#include <settings.h>
+
+PlainTextEdit::PlainTextEdit(QWidget *parent) : QPlainTextEdit(parent)
+{
+}
 
 void PlainTextEdit::mousePressEvent(QMouseEvent *event)
 {
@@ -33,6 +38,7 @@ void PlainTextEdit::wheelEvent(QWheelEvent *event)
         {
             zoomOut(2);
         }
+        Settings::getInstance().setFont(font());
         return;
     }
 

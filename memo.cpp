@@ -3,6 +3,12 @@
 #include <QTextStream>
 #include <QException>
 #include <QDebug>
+#include <settings.h>
+
+Memo::Memo()
+{
+    loadFile(Settings::getInstance().getFilename());
+}
 
 void Memo::loadFile(const QString &fileName)
 {

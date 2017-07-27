@@ -4,10 +4,11 @@
 #include <QMenu>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QFontDialog>
 #include <QTextCursor>
 #include <QTextBlock>
 #include <QScrollBar>
+#include "settingswindow.h"
+#include "settings.h"
 
 static const int NO_CURRENT_FILTERED_LINE_NUMBER = -1;
 
@@ -17,12 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     mIsFiltering(false)
 {
     ui->setupUi(this);
-    restoreGeometry(mSettings.getWindowGeometry());
-    setAlwaysOnTop();
-
-    mMemo.loadFile(mSettings.getFilename());
-
-    ui->plainTextEdit->setFont(mSettings.getFont());
+    restoreGeometry(Settings::getInstance().getWindowGeometry());
+    loadSettings();
     setPlainTextFromFile();
 }
 
@@ -31,10 +28,15 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::loadSettings()
+{
+    ui->plainTextEdit->setFont(Settings::getInstance().getFont());
+    setAlwaysOnTop();
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    mSettings.setWindowGeometry(saveGeometry());
-    mSettings.setFont( ui->plainTextEdit->font());
+    Settings::getInstance().setWindowGeometry(saveGeometry());
     QMainWindow::closeEvent(event);
 }
 
@@ -42,6 +44,10 @@ void MainWindow::on_lineEditSearch_textChanged(const QString &filter)
 {
     if (!mIsFiltering)
     {
+        if (filter.length() < Settings::getInstance().getFilterThreshold())
+        {
+            return;
+        }
         mIsFiltering = true;
         mMemo.setText(ui->plainTextEdit->toPlainText());
     }
@@ -85,7 +91,7 @@ void MainWindow::createMenuActions()
 {
     QAction *filter      = new QAction("Filter Text");
     QAction *copyLine    = new QAction("Copy Line               Ctrl+Left Mouse");
-    QAction *changeFont  = new QAction("Change Font...");
+    QAction *settings    = new QAction("Settings...");
     QAction *alwaysOnTop = new QAction("Always On Top");
     QAction *loadFile    = new QAction("Load File...");
     QAction *saveFile    = new QAction("Save File");
@@ -99,17 +105,17 @@ void MainWindow::createMenuActions()
     filter->setShortcut  (Qt::CTRL | Qt::Key_F);
     loadFile->setShortcut(Qt::CTRL | Qt::Key_O);
     saveFile->setShortcut(Qt::CTRL | Qt::Key_S);
-    help->setShortcut(Qt::Key_F1);
+    help->setShortcut    (Qt::Key_F1);
 
     alwaysOnTop->setCheckable(true);
-    alwaysOnTop->setChecked(mSettings.getAlwaysOnTop());
+    alwaysOnTop->setChecked(Settings::getInstance().isAlwaysOnTop());
     separator1->setSeparator(true);
     separator2->setSeparator(true);
     separator3->setSeparator(true);
 
     connect(filter,      SIGNAL(triggered()), this, SLOT(filterTextAction()));
     connect(copyLine,    SIGNAL(triggered()), this, SLOT(copyLineAction()));
-    connect(changeFont,  SIGNAL(triggered()), this, SLOT(changeFontAction()));
+    connect(settings,    SIGNAL(triggered()), this, SLOT(settingsAction()));
     connect(alwaysOnTop, SIGNAL(triggered()), this, SLOT(alwaysOnTopAction()));
     connect(loadFile,    SIGNAL(triggered()), this, SLOT(loadFileAction()));
     connect(saveFile,    SIGNAL(triggered()), this, SLOT(saveFileAction()));
@@ -121,13 +127,13 @@ void MainWindow::createMenuActions()
     menu->addActions({filter,
                       copyLine,
                       separator1,
-                      changeFont,
-                      alwaysOnTop,
-                      separator2,
                       loadFile,
                       saveFile,
                       saveFileAs,
                       separator3,
+                      alwaysOnTop,
+                      settings,
+                      separator2,
                       help});
 
     ui->pushButtonMenu->setMenu(menu);
@@ -148,34 +154,24 @@ void MainWindow::copyLineAction()
     ui->plainTextEdit->copy();
 }
 
-void MainWindow::changeFontAction()
-{
-    bool ok;
-    QFont font = QFontDialog::getFont(&ok, ui->plainTextEdit->font(), this);
-    if (ok)
-    {
-        ui->plainTextEdit->setFont(font);
-        mSettings.setFont(font);
-    }
-}
-
 void MainWindow::alwaysOnTopAction()
 {
-    mSettings.setAlwaysOnTop(!mSettings.getAlwaysOnTop());
+    Settings::getInstance().setAlwaysOnTop(!Settings::getInstance().isAlwaysOnTop());
     setAlwaysOnTop();
 }
 
 void MainWindow::setAlwaysOnTop()
 {
     Qt::WindowFlags flags = this->windowFlags();
-    if (mSettings.getAlwaysOnTop())
+    if (Settings::getInstance().isAlwaysOnTop())
     {
-        this->setWindowFlags(flags | Qt::WindowStaysOnTopHint);
+        flags = flags | Qt::WindowStaysOnTopHint;
     }
     else
     {
-        this->setWindowFlags(flags & ~Qt::WindowStaysOnTopHint);
+        flags = flags & ~Qt::WindowStaysOnTopHint;
     }
+    this->setWindowFlags(flags);
     this->show();
 }
 
@@ -209,12 +205,12 @@ void MainWindow::loadFile(const QString &filename)
 
     mMemo.loadFile(filename);
     setPlainTextFromFile();
-    mSettings.setFilename(filename);
+    Settings::getInstance().setFilename(filename);
 }
 
 void MainWindow::saveFile()
 {
-    const QString filename = mSettings.getFilename();
+    const QString filename = Settings::getInstance().getFilename();
     if (filename.isEmpty())
     {
         saveFileAsAction();
@@ -245,19 +241,42 @@ void MainWindow::saveFileAsAction()
                                                     tr("Text File (*.txt);;All Files (*)"));
     if (!fileName.isEmpty())
     {
-        mSettings.setFilename(fileName);
+        Settings::getInstance().setFilename(fileName);
         saveFile();
     }
 }
 
 void MainWindow::helpAction()
 {
-    QMessageBox::information(this, tr("Memo Filter"),
-                             tr("Use fuzzy match to filter text (e.g. 'ore psu' will find 'Lorem Ipsum').\n\n"
-                                "Press Enter in the Filter field to go to the next filter result.\n\n"
-                                "Use Ctrl + Left Mouse Click on the line, to copy whole line to clipboard.\n\n"
-                                "Written by Stepan Sypliak using Qt Creator.\nv1.0"),
+    QMessageBox::information(this, tr("Text Filter"),
+                             tr("Text Filter v1.1\n\n"
+                                " * Use fuzzy match to filter text (e.g. 'ore psu' will find 'Lorem Ipsum').\n"
+                                " * Press Enter in the Filter field to go to the next filter result.\n"
+                                " * Use Ctrl + Left Mouse Click on the line, to copy whole line to clipboard.\n\n"
+                                "Written by Stepan Sypliak using Qt Creator."),
                              QMessageBox::Ok);
+}
+
+void MainWindow::settingsAction()
+{
+    SettingsWindow *settingsWindow = new SettingsWindow();
+    settingsWindow->setModal(true);
+
+    connect(settingsWindow, &SettingsWindow::applySettings,
+            this, &MainWindow::loadSettings);
+
+    Qt::WindowFlags flags = settingsWindow->windowFlags();
+    flags = flags & ~Qt::WindowContextHelpButtonHint; // Hide help ? button
+    if (Settings::getInstance().isAlwaysOnTop())
+    {
+        flags = flags | Qt::WindowStaysOnTopHint;
+    }
+    else
+    {
+        flags = flags & ~Qt::WindowStaysOnTopHint;
+    }
+    settingsWindow->setWindowFlags(flags);
+    settingsWindow->exec();
 }
 
 void MainWindow::on_lineEditSearch_returnPressed()

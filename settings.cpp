@@ -4,12 +4,13 @@
 #include <QSettings>
 #include <QDesktopWidget>
 
-const static QString cFilename    = "FILE_NAME";
-const static QString cFontName    = "FONT_NAME";
-const static QString cFontSize    = "FONT_SIZE";
-const static QString cFontBold    = "FONT_BOLD";
-const static QString cGeometry    = "GEOMETRY";
-const static QString cAlwaysOnTop = "ALWAYS_ON_TOP";
+const static QString cFilename        = "FILE_NAME";
+const static QString cFontName        = "FONT_NAME";
+const static QString cFontSize        = "FONT_SIZE";
+const static QString cFontBold        = "FONT_BOLD";
+const static QString cGeometry        = "GEOMETRY";
+const static QString cAlwaysOnTop     = "ALWAYS_ON_TOP";
+const static QString cFilterThreshold = "FILTER_THRESHOLD";
 
 Settings::Settings()
 {
@@ -19,6 +20,7 @@ Settings::Settings()
     mFilename = settings.value(cFilename, "").toString();
     mGeometry = settings.value(cGeometry, QByteArray{}).toByteArray();
     mAlwaysOnTop = settings.value(cAlwaysOnTop, true).toBool();
+    mFilterThreshold = settings.value(cFilterThreshold, 1).toInt();
 
     const QString fontName = settings.value(cFontName, "Courier New").toString();
     const int fontSize     = settings.value(cFontSize, 11).toInt();
@@ -37,6 +39,7 @@ void Settings::saveSettings()
     settings.setValue(cFontBold, mFont.bold());
     settings.setValue(cGeometry, mGeometry);
     settings.setValue(cAlwaysOnTop, mAlwaysOnTop);
+    settings.setValue(cFilterThreshold, mFilterThreshold);
 }
 
 void Settings::setFilename(const QString &filename)
@@ -60,5 +63,11 @@ void Settings::setWindowGeometry(const QByteArray &geometry)
 void Settings::setAlwaysOnTop(bool alwaysOnTop)
 {
     mAlwaysOnTop = alwaysOnTop;
+    saveSettings();
+}
+
+void Settings::setFilterThreshold(const int filterThreshold)
+{
+    mFilterThreshold = filterThreshold;
     saveSettings();
 }

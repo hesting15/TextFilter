@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <settings.h>
 #include <memo.h>
 
 namespace Ui {
@@ -17,6 +16,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void loadSettings();
+
 protected:
     bool event(QEvent *event);
     void closeEvent(QCloseEvent *event);
@@ -28,29 +29,28 @@ private slots:
 
     void filterTextAction();
     void copyLineAction();
-    void changeFontAction();
     void alwaysOnTopAction();
     void loadFileAction();
     void saveFile();
     void saveFileAction();
     void saveFileAsAction();
     void helpAction();
+    void settingsAction();
 
 private:
+    void createMenuActions();
+    QBrush getDefaultBackgroungColor();
+    void loadFile(const QString &fileName);
+    void higlightTextInLine(const int lineNumber, const bool underline, std::vector<std::pair<int, int>> highlightPositions);
+    void highlightCurrentLine();
+    void setAlwaysOnTop();
+    void setPlainTextFromFile();
+
     Ui::MainWindow *ui;
-    Settings mSettings;
     Memo mMemo;
     bool mIsFiltering;
     std::vector<FilteredLine> mFilteredLines;
     int mCurrentFilteredLineNumber;
-
-    void createMenuActions();
-    void loadFile(const QString &fileName);
-    void higlightTextInLine(const int lineNumber, const bool underline, std::vector<std::pair<int, int> > highlightPositions);
-    QBrush getDefaultBackgroungColor();
-    void highlightCurrentLine();
-    void setAlwaysOnTop();
-    void setPlainTextFromFile();
 };
 
 #endif // MAINWINDOW_H

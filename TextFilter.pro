@@ -28,15 +28,18 @@ SOURCES += \
         mainwindow.cpp \
     memo.cpp \
     settings.cpp \
-    plaintextedit.cpp
+    plaintextedit.cpp \
+    settingswindow.cpp
 
 HEADERS += \
         mainwindow.h \
     memo.h \
     settings.h \
-    plaintextedit.h
+    plaintextedit.h \
+    settingswindow.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    settingswindow.ui
 
 RC_ICONS += Icon64.ico
