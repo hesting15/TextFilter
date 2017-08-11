@@ -14,5 +14,5 @@ Features:
 
 Application is written in `Qt Creator`
 
-Download version `1.1`:
-- [Windows](https://github.com/hesting15/TextFilter/releases/download/v1.1/TextFilter_v1.1.zip)
+Download version `1.2`:
+- [Windows](https://github.com/hesting15/TextFilter/releases/download/v1.2/TextFilter_v1.2.zip)
