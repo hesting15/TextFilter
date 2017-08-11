@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <memo.h>
 
 namespace Ui {
 class MainWindow;
@@ -15,8 +14,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
-    void loadSettings();
 
 protected:
     bool event(QEvent *event);
@@ -36,21 +33,16 @@ private slots:
     void saveFileAsAction();
     void helpAction();
     void settingsAction();
+    void copyMultipleLinesAction();
 
 private:
+    void loadSettings();
     void createMenuActions();
-    QBrush getDefaultBackgroungColor();
     void loadFile(const QString &fileName);
-    void higlightTextInLine(const int lineNumber, const bool underline, std::vector<std::pair<int, int>> highlightPositions);
-    void highlightCurrentLine();
     void setAlwaysOnTop();
-    void setPlainTextFromFile();
+    void loadTextFromFile();
 
     Ui::MainWindow *ui;
-    Memo mMemo;
-    bool mIsFiltering;
-    std::vector<FilteredLine> mFilteredLines;
-    int mCurrentFilteredLineNumber;
 };
 
 #endif // MAINWINDOW_H

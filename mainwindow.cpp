@@ -4,23 +4,17 @@
 #include <QMenu>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QTextCursor>
-#include <QTextBlock>
-#include <QScrollBar>
 #include "settingswindow.h"
 #include "settings.h"
 
-static const int NO_CURRENT_FILTERED_LINE_NUMBER = -1;
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    mIsFiltering(false)
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     restoreGeometry(Settings::getInstance().getWindowGeometry());
     loadSettings();
-    setPlainTextFromFile();
+    loadTextFromFile();
 }
 
 MainWindow::~MainWindow()
@@ -42,55 +36,24 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::on_lineEditSearch_textChanged(const QString &filter)
 {
-    if (!mIsFiltering)
-    {
-        if (filter.length() < Settings::getInstance().getFilterThreshold())
-        {
-            return;
-        }
-        mIsFiltering = true;
-        mMemo.setText(ui->plainTextEdit->toPlainText());
-    }
-    else if (filter.isEmpty())
-    {        
-        setPlainTextFromFile();
-        return;
-    }
-
-    mCurrentFilteredLineNumber = NO_CURRENT_FILTERED_LINE_NUMBER;
-    ui->plainTextEdit->setPlainText("");
-
-    mMemo.filterText(filter, mFilteredLines);
-
-    for (const FilteredLine& filteredLine : mFilteredLines)
-    {
-        ui->plainTextEdit->appendPlainText(filteredLine.text);
-        higlightTextInLine(ui->plainTextEdit->document()->lineCount() - 1, false, filteredLine.highlightPositions);
-    }
-
-    ui->toolButtonPrevious->setEnabled(mFilteredLines.size()>0);
-    ui->toolButtonNext->setEnabled(mFilteredLines.size()>0);
+    const int filteredLinesCount = ui->plainTextEdit->applyFilter(filter);
+    ui->toolButtonPrevious->setEnabled(filteredLinesCount>0);
+    ui->toolButtonNext->setEnabled(filteredLinesCount>0);
 }
 
-void MainWindow::setPlainTextFromFile()
+void MainWindow::loadTextFromFile()
 {
-    mIsFiltering = false;
+    ui->plainTextEdit->clearFilterAndLoadTextFromFile();
     ui->lineEditSearch->clear();
     ui->toolButtonPrevious->setEnabled(false);
     ui->toolButtonNext->setEnabled(false);
-
-    QTextCursor cursor(ui->plainTextEdit->document());
-    QTextCharFormat fmt;
-    fmt.setBackground(getDefaultBackgroungColor());
-    cursor.setCharFormat(fmt);
-    ui->plainTextEdit->setTextCursor(cursor);
-    ui->plainTextEdit->setPlainText(mMemo.getText());
 }
 
 void MainWindow::createMenuActions()
 {
     QAction *filter      = new QAction("Filter Text");
     QAction *copyLine    = new QAction("Copy Line               Ctrl+Left Mouse");
+    QAction *copyLines   = new QAction("Copy Multiple Lines");
     QAction *settings    = new QAction("Settings...");
     QAction *alwaysOnTop = new QAction("Always On Top");
     QAction *loadFile    = new QAction("Load File...");
@@ -105,6 +68,7 @@ void MainWindow::createMenuActions()
     filter->setShortcut  (Qt::CTRL | Qt::Key_F);
     loadFile->setShortcut(Qt::CTRL | Qt::Key_O);
     saveFile->setShortcut(Qt::CTRL | Qt::Key_S);
+    copyLines->setShortcut(Qt::ALT | Qt::Key_C);
     help->setShortcut    (Qt::Key_F1);
 
     alwaysOnTop->setCheckable(true);
@@ -115,6 +79,7 @@ void MainWindow::createMenuActions()
 
     connect(filter,      SIGNAL(triggered()), this, SLOT(filterTextAction()));
     connect(copyLine,    SIGNAL(triggered()), this, SLOT(copyLineAction()));
+    connect(copyLines,   SIGNAL(triggered()), this, SLOT(copyMultipleLinesAction()));
     connect(settings,    SIGNAL(triggered()), this, SLOT(settingsAction()));
     connect(alwaysOnTop, SIGNAL(triggered()), this, SLOT(alwaysOnTopAction()));
     connect(loadFile,    SIGNAL(triggered()), this, SLOT(loadFileAction()));
@@ -126,6 +91,7 @@ void MainWindow::createMenuActions()
 
     menu->addActions({filter,
                       copyLine,
+                      copyLines,
                       separator1,
                       loadFile,
                       saveFile,
@@ -150,6 +116,42 @@ void MainWindow::copyLineAction()
     QTextCursor cursor(ui->plainTextEdit->textCursor());
     cursor.movePosition(QTextCursor::StartOfLine);
     cursor.select(QTextCursor::LineUnderCursor);
+    ui->plainTextEdit->setTextCursor(cursor);
+    ui->plainTextEdit->copy();
+}
+
+void MainWindow::copyMultipleLinesAction()
+{
+    QTextCursor cursor = ui->plainTextEdit->textCursor();
+    if (cursor.hasSelection())
+    {
+        int start = cursor.selectionStart();
+        int end = cursor.selectionEnd();
+
+        // Check if selection begins from beginning of line
+        cursor.setPosition(start);
+        cursor.movePosition(QTextCursor::StartOfLine);
+        if (start == cursor.position())
+        {
+            // Continue selecting text
+            cursor.setPosition(end, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+            ui->plainTextEdit->setTextCursor(cursor);
+            ui->plainTextEdit->copy();
+            return;
+        }
+        else
+        {
+            // If selections begins in the middle of the line
+            // ignore selection and copy current line
+            cursor.setPosition(end);
+        }
+    }
+
+    cursor.movePosition(QTextCursor::StartOfLine);
+    cursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
     ui->plainTextEdit->setTextCursor(cursor);
     ui->plainTextEdit->copy();
 }
@@ -202,9 +204,7 @@ void MainWindow::loadFile(const QString &filename)
     }
 
     ui->lineEditSearch->clear();
-
-    mMemo.loadFile(filename);
-    setPlainTextFromFile();
+    ui->plainTextEdit->loadFile(filename);
     Settings::getInstance().setFilename(filename);
 }
 
@@ -217,16 +217,7 @@ void MainWindow::saveFile()
         return;
     }
 
-    mMemo.setText(ui->plainTextEdit->toPlainText());
-
-    try
-    {
-        mMemo.saveFile(filename);
-    }
-    catch(const std::runtime_error& ex)
-    {
-        QMessageBox::information(this, tr("Unable to save file"), ex.what());
-    }
+    ui->plainTextEdit->saveFile(filename);
 }
 
 void MainWindow::saveFileAction()
@@ -249,10 +240,12 @@ void MainWindow::saveFileAsAction()
 void MainWindow::helpAction()
 {
     QMessageBox::information(this, tr("Text Filter"),
-                             tr("Text Filter v1.1\n\n"
+                             tr("Text Filter v1.2\n\n"
                                 " * Use fuzzy match to filter text (e.g. 'ore psu' will find 'Lorem Ipsum').\n"
                                 " * Press Enter in the Filter field to go to the next filter result.\n"
-                                " * Use Ctrl + Left Mouse Click on the line, to copy whole line to clipboard.\n\n"
+                                " * Use Ctrl + Left Mouse Click on the line, to copy whole line to clipboard.\n"
+                                " * Press Alt + C several times to extend selection and copy multiple lines to clipboard.\n"
+                                "\n"
                                 "Written by Stepan Sypliak using Qt Creator."),
                              QMessageBox::Ok);
 }
@@ -284,102 +277,12 @@ void MainWindow::on_lineEditSearch_returnPressed()
     on_toolButtonNext_clicked();
 }
 
-QBrush MainWindow::getDefaultBackgroungColor()
-{
-    return ui->plainTextEdit->palette().brush(QPalette::ColorRole::Base);
-}
-
-void MainWindow::higlightTextInLine(const int lineNumber, const bool highlight, std::vector<std::pair<int, int>> highlightPositions)
-{
-    QTextCursor cursor(ui->plainTextEdit->document()->findBlockByLineNumber(lineNumber));
-    int beginningOfLine = cursor.position();
-
-    // highlight whole line
-    QTextCharFormat fmt;
-    fmt.setBackground(highlight ? QColor(233,233,233) : getDefaultBackgroungColor());
-    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
-    cursor.setCharFormat(fmt);
-
-    // higlight filtered text
-    fmt.setBackground(highlight ? Qt::green : Qt::yellow);
-
-    for (const auto& highlightPosition : highlightPositions)
-    {
-        cursor.setPosition(beginningOfLine + highlightPosition.first,  QTextCursor::MoveAnchor);
-        cursor.setPosition(beginningOfLine + highlightPosition.second, QTextCursor::KeepAnchor);
-        cursor.setCharFormat(fmt);
-    }
-}
-
 void MainWindow::on_toolButtonPrevious_clicked()
 {
-    if (mIsFiltering && mFilteredLines.size() > 0)
-    {
-        if (mCurrentFilteredLineNumber == NO_CURRENT_FILTERED_LINE_NUMBER)
-        {
-            mCurrentFilteredLineNumber = mFilteredLines.size() - 1;
-            ui->plainTextEdit->setPlainText(mMemo.getText());
-            for (const FilteredLine& filteredLine : mFilteredLines)
-            {
-                higlightTextInLine(filteredLine.lineNumber, false, filteredLine.highlightPositions);
-            }
-        }
-        else
-        {
-            FilteredLine filteredLine = mFilteredLines[mCurrentFilteredLineNumber];
-            higlightTextInLine(filteredLine.lineNumber, false, filteredLine.highlightPositions);
-
-            --mCurrentFilteredLineNumber;
-            if (mCurrentFilteredLineNumber < 0)
-            {
-                mCurrentFilteredLineNumber =  mFilteredLines.size() - 1;
-            }
-        }
-        highlightCurrentLine();
-    }
+    ui->plainTextEdit->gotoPreviousFilteredLine();
 }
 
 void MainWindow::on_toolButtonNext_clicked()
 {
-    if (mIsFiltering && mFilteredLines.size() > 0)
-    {
-        if (mCurrentFilteredLineNumber == NO_CURRENT_FILTERED_LINE_NUMBER)
-        {
-            mCurrentFilteredLineNumber = 0;
-            ui->plainTextEdit->setPlainText(mMemo.getText());
-            for (const FilteredLine& filteredLine : mFilteredLines)
-            {
-                higlightTextInLine(filteredLine.lineNumber, false, filteredLine.highlightPositions);
-            }
-        }
-        else
-        {
-            FilteredLine filteredLine = mFilteredLines[mCurrentFilteredLineNumber];
-            higlightTextInLine(filteredLine.lineNumber, false, filteredLine.highlightPositions);
-
-            ++mCurrentFilteredLineNumber;
-            if (mCurrentFilteredLineNumber >= (int)mFilteredLines.size())
-            {
-                mCurrentFilteredLineNumber = 0;
-            }
-        }
-        highlightCurrentLine();
-    }
-}
-
-void MainWindow::highlightCurrentLine()
-{
-    FilteredLine filteredLine = mFilteredLines[mCurrentFilteredLineNumber];
-    QTextCursor cursor(ui->plainTextEdit->document()->findBlockByLineNumber(filteredLine.lineNumber));
-
-    // Show current line in the middle of the text edit
-    int numberOfVisibleLines = ui->plainTextEdit->height() / ui->plainTextEdit->fontMetrics().height();
-    ui->plainTextEdit->verticalScrollBar()->setValue(filteredLine.lineNumber - numberOfVisibleLines/2);
-
-    QTextCharFormat fmt;
-    fmt.setBackground(getDefaultBackgroungColor());
-    cursor.setCharFormat(fmt);
-
-    higlightTextInLine(filteredLine.lineNumber, true, filteredLine.highlightPositions);
-    ui->plainTextEdit->setTextCursor(cursor);
+    ui->plainTextEdit->gotoNextFilteredLine();
 }
