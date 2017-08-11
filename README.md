@@ -10,6 +10,7 @@ Features:
 - Press `Enter` to go to the line in original text
 - Use `Ctrl+Left Mouse` click to copy whole line to the clipboard
 - Use fuzzy search to filter text (e.g. `ore psu` will find `Lorem Ipsum`)
+- Press `Alt+C` several times to extend selection and copy multiple lines to clipboard
 
 Application is written in `Qt Creator`
 

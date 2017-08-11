@@ -43,3 +43,6 @@ FORMS += \
     settingswindow.ui
 
 RC_ICONS += Icon64.ico
+
+DISTFILES += \
+    README.md
