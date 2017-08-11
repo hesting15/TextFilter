@@ -12,3 +12,6 @@ Features:
 - Use fuzzy search to filter text (e.g. `ore psu` will find `Lorem Ipsum`)
 
 Application is written in `Qt Creator`
+
+Download version `1.1`:
+- [Windows](https://github.com/hesting15/TextFilter/releases/download/v1.1/TextFilter_v1.1.zip)
