@@ -39,6 +39,7 @@ private:
     void higlightTextInLine(const int lineNumber, const bool highlight, std::vector<std::pair<int, int>> highlightPositions);
     void reapplyFilterIfNeeded();
     void clearHighlighting();
+    int getCurrentLineNumber(QTextCursor cursor);
 };
 
 #endif // PLAINTEXTEDIT_H

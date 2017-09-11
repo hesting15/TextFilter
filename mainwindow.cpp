@@ -26,6 +26,7 @@ void MainWindow::loadSettings()
 {
     ui->plainTextEdit->setFont(Settings::getInstance().getFont());
     setAlwaysOnTop();
+    setWrapMode();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -175,6 +176,13 @@ void MainWindow::setAlwaysOnTop()
     }
     this->setWindowFlags(flags);
     this->show();
+}
+
+void MainWindow::setWrapMode()
+{
+    QPlainTextEdit::LineWrapMode mode = Settings::getInstance().isWordWrap() ? QPlainTextEdit::WidgetWidth
+                                                                             : QPlainTextEdit::NoWrap;
+    ui->plainTextEdit->setLineWrapMode(mode);
 }
 
 bool MainWindow::event(QEvent *event)

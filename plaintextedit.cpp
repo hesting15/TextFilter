@@ -24,7 +24,8 @@ void PlainTextEdit::mousePressEvent(QMouseEvent *event)
     {
         int line = event->pos().y() / fontMetrics().height() + verticalScrollBar()->value();
         QTextCursor cursor(document()->findBlockByLineNumber(line));
-        cursor.select(QTextCursor::LineUnderCursor);
+        cursor.movePosition(QTextCursor::EndOfBlock);
+        cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
         copy();
         return;
@@ -102,7 +103,7 @@ int PlainTextEdit::applyFilter(const QString &filter)
     for (const FilteredLine& filteredLine : mFilteredLines)
     {
         appendPlainText(filteredLine.text);
-        higlightTextInLine(document()->lineCount() - 1, false, filteredLine.highlightPositions);
+        higlightTextInLine(document()->blockCount() - 1, false, filteredLine.highlightPositions);
     }
     mInFilterMode = true;
 
@@ -220,11 +221,7 @@ void PlainTextEdit::reapplyFilterIfNeeded()
 void PlainTextEdit::highlightCurrentLine()
 {
     FilteredLine filteredLine = mFilteredLines[mCurrentFilteredLineNumber];
-    QTextCursor cursor(document()->findBlockByLineNumber(filteredLine.lineNumber));
-
-    // Show current line in the middle of the text edit
-    int numberOfVisibleLines = height() / fontMetrics().height();
-    verticalScrollBar()->setValue(filteredLine.lineNumber - numberOfVisibleLines/2);
+    QTextCursor cursor(document()->findBlockByNumber(filteredLine.lineNumber));
 
     QTextCharFormat fmt;
     fmt.setBackground(getDefaultBackgroungColor());
@@ -232,17 +229,42 @@ void PlainTextEdit::highlightCurrentLine()
 
     higlightTextInLine(filteredLine.lineNumber, true, filteredLine.highlightPositions);
     setTextCursor(cursor);
+
+    // Show current line in the middle of the text edit
+    int numberOfVisibleLines = height() / fontMetrics().height();
+    int currentLine = getCurrentLineNumber(cursor);
+    verticalScrollBar()->setValue(currentLine - numberOfVisibleLines/2);
+}
+
+int PlainTextEdit::getCurrentLineNumber(QTextCursor cursor)
+{
+    cursor.movePosition(QTextCursor::StartOfLine);
+
+    int lines = 1;
+    while(cursor.positionInBlock() > 0)
+    {
+        cursor.movePosition(QTextCursor::Up);
+        lines++;
+    }
+
+    QTextBlock block = cursor.block().previous();
+    while(block.isValid())
+    {
+        lines += block.lineCount();
+        block = block.previous();
+    }
+    return lines;
 }
 
 void PlainTextEdit::higlightTextInLine(const int lineNumber, const bool highlight, std::vector<std::pair<int, int>> highlightPositions)
 {
-    QTextCursor cursor(document()->findBlockByLineNumber(lineNumber));
+    QTextCursor cursor(document()->findBlockByNumber(lineNumber));
     int beginningOfLine = cursor.position();
 
     // highlight whole line
     QTextCharFormat fmt;
     fmt.setBackground(highlight ? QColor(233,233,233) : getDefaultBackgroungColor());
-    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     cursor.setCharFormat(fmt);
 
     // higlight filtered text

@@ -11,6 +11,7 @@ const static QString cFontBold        = "FONT_BOLD";
 const static QString cGeometry        = "GEOMETRY";
 const static QString cAlwaysOnTop     = "ALWAYS_ON_TOP";
 const static QString cFilterThreshold = "FILTER_THRESHOLD";
+const static QString cWordWrap        = "WORD_WRAP";
 
 Settings::Settings()
 {
@@ -21,6 +22,7 @@ Settings::Settings()
     mGeometry = settings.value(cGeometry, QByteArray{}).toByteArray();
     mAlwaysOnTop = settings.value(cAlwaysOnTop, true).toBool();
     mFilterThreshold = settings.value(cFilterThreshold, 1).toInt();
+    mWordWrap = settings.value(cWordWrap, false).toBool();
 
     const QString fontName = settings.value(cFontName, "Courier New").toString();
     const int fontSize     = settings.value(cFontSize, 11).toInt();
@@ -40,6 +42,7 @@ void Settings::saveSettings()
     settings.setValue(cGeometry, mGeometry);
     settings.setValue(cAlwaysOnTop, mAlwaysOnTop);
     settings.setValue(cFilterThreshold, mFilterThreshold);
+    settings.setValue(cWordWrap, mWordWrap);
 }
 
 void Settings::setFilename(const QString &filename)
@@ -60,7 +63,7 @@ void Settings::setWindowGeometry(const QByteArray &geometry)
     saveSettings();
 }
 
-void Settings::setAlwaysOnTop(bool alwaysOnTop)
+void Settings::setAlwaysOnTop(const bool alwaysOnTop)
 {
     mAlwaysOnTop = alwaysOnTop;
     saveSettings();
@@ -69,5 +72,11 @@ void Settings::setAlwaysOnTop(bool alwaysOnTop)
 void Settings::setFilterThreshold(const int filterThreshold)
 {
     mFilterThreshold = filterThreshold;
+    saveSettings();
+}
+
+void Settings::setWordWrap(const bool wordWrap)
+{
+    mWordWrap = wordWrap;
     saveSettings();
 }

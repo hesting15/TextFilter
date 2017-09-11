@@ -24,12 +24,14 @@ public:
     QByteArray getWindowGeometry() { return mGeometry;        }
     bool isAlwaysOnTop()           { return mAlwaysOnTop;     }
     int getFilterThreshold()       { return mFilterThreshold; }
+    bool isWordWrap()              { return mWordWrap;        }
 
     void setFilename(const QString &filename);
     void setFont(const QFont &font);
     void setWindowGeometry(const QByteArray &geometry);
-    void setAlwaysOnTop(bool alwaysOnTop);
+    void setAlwaysOnTop(const bool alwaysOnTop);
     void setFilterThreshold(const int filterThreshold);
+    void setWordWrap(const bool wordWrap);
 
 private:
     Settings();
@@ -42,6 +44,7 @@ private:
     QByteArray mGeometry;
     bool       mAlwaysOnTop;
     int        mFilterThreshold;
+    bool       mWordWrap;
 };
 
 #endif // SETTINGS_H

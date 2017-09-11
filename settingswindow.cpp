@@ -14,6 +14,7 @@ SettingsWindow::SettingsWindow(QWidget *parent) :
     setFontTitle();
     ui->checkBoxAlwaysOnTop->setChecked(Settings::getInstance().isAlwaysOnTop());
     ui->spinBoxStartFilter->setValue(Settings::getInstance().getFilterThreshold());
+    ui->checkBoxWordWrap->setChecked(Settings::getInstance().isWordWrap());
 }
 
 SettingsWindow::~SettingsWindow()
@@ -36,6 +37,7 @@ void SettingsWindow::on_pushButtonOk_clicked()
     Settings::getInstance().setFont(mFont);
     Settings::getInstance().setFilterThreshold(ui->spinBoxStartFilter->value());
     Settings::getInstance().setAlwaysOnTop(ui->checkBoxAlwaysOnTop->isChecked());
+    Settings::getInstance().setWordWrap(ui->checkBoxWordWrap->isChecked());
     emit applySettings();
     close();
 }

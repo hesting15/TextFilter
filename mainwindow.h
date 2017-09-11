@@ -40,6 +40,7 @@ private:
     void createMenuActions();
     void loadFile(const QString &fileName);
     void setAlwaysOnTop();
+    void setWrapMode();
     void loadTextFromFile();
 
     Ui::MainWindow *ui;
