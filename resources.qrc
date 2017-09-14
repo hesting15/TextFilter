@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/icon_open.png</file>
+        <file>resources/icon_save.png</file>
+        <file>resources/icon_save_as.png</file>
+        <file>resources/icon_on_top.png</file>
+        <file>resources/icon_wrap_text.png</file>
+        <file>resources/icon_copy.png</file>
+        <file>resources/icon_filter.png</file>
+        <file>resources/icon_multiple_copy.png</file>
+        <file>resources/icon_settings.png</file>
+        <file>resources/icon_help.png</file>
+        <file>resources/icon_menu.png</file>
+    </qresource>
+</RCC>

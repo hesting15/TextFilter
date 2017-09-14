@@ -6,14 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>459</width>
-    <height>196</height>
+    <width>433</width>
+    <height>200</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>1</horstretch>
+    <verstretch>1</verstretch>
+   </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>200</width>
-    <height>80</height>
+    <width>430</width>
+    <height>140</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -26,15 +32,9 @@
      <verstretch>1</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QFormLayout" name="formLayout_2">
+   <layout class="QGridLayout" name="gridLayout">
     <property name="sizeConstraint">
      <enum>QLayout::SetDefaultConstraint</enum>
-    </property>
-    <property name="horizontalSpacing">
-     <number>2</number>
-    </property>
-    <property name="verticalSpacing">
-     <number>2</number>
     </property>
     <property name="leftMargin">
      <number>2</number>
@@ -48,38 +48,10 @@
     <property name="bottomMargin">
      <number>2</number>
     </property>
-    <item row="5" column="0" colspan="2">
-     <widget class="PlainTextEdit" name="plainTextEdit">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>1</horstretch>
-        <verstretch>1</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <family>Courier New</family>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="contextMenuPolicy">
-       <enum>Qt::DefaultContextMenu</enum>
-      </property>
-      <property name="autoFillBackground">
-       <bool>false</bool>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="lineWidth">
-       <number>2</number>
-      </property>
-      <property name="lineWrapMode">
-       <enum>QPlainTextEdit::NoWrap</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0" colspan="2">
+    <property name="spacing">
+     <number>2</number>
+    </property>
+    <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0">
       <property name="spacing">
        <number>0</number>
@@ -106,6 +78,13 @@
         </property>
         <property name="text">
          <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="resources.qrc">
+          <normaloff>:/resources/icon_menu.png</normaloff>:/resources/icon_menu.png</iconset>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -197,6 +176,505 @@
       </item>
      </layout>
     </item>
+    <item row="1" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+    </item>
+    <item row="2" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QWidget" name="widgetMenu" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>40</height>
+         </size>
+        </property>
+        <widget class="QToolButton" name="toolButton">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>10</y>
+           <width>32</width>
+           <height>32</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save As...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>icon_open.png</normaloff>icon_open.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextOnly</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QToolButton" name="toolButtonOpenFile">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>36</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open File... (Crtl+O)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/resources/icon_open.png</normaloff>:/resources/icon_open.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="shortcut">
+          <string>Ctrl+O</string>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::NoArrow</enum>
+         </property>
+        </widget>
+        <widget class="QToolButton" name="toolButtonSaveFile">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>0</y>
+           <width>36</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save File (Crtl+S)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/resources/icon_save.png</normaloff>:/resources/icon_save.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="shortcut">
+          <string>Ctrl+S</string>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::NoArrow</enum>
+         </property>
+        </widget>
+        <widget class="QToolButton" name="toolButtonSaveFileAs">
+         <property name="geometry">
+          <rect>
+           <x>80</x>
+           <y>0</y>
+           <width>36</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sava File As...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/resources/icon_save_as.png</normaloff>:/resources/icon_save_as.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::NoArrow</enum>
+         </property>
+        </widget>
+        <widget class="QToolButton" name="toolButtonAlwaysOnTop">
+         <property name="geometry">
+          <rect>
+           <x>260</x>
+           <y>0</y>
+           <width>36</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Always On Top&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/resources/icon_on_top.png</normaloff>:/resources/icon_on_top.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::NoArrow</enum>
+         </property>
+        </widget>
+        <widget class="QToolButton" name="toolButtonWordWrap">
+         <property name="geometry">
+          <rect>
+           <x>300</x>
+           <y>0</y>
+           <width>36</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wrap Text&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/resources/icon_wrap_text.png</normaloff>:/resources/icon_wrap_text.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::NoArrow</enum>
+         </property>
+        </widget>
+        <widget class="QToolButton" name="toolButtonFilterText">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>0</y>
+           <width>36</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter Text (Crtl+F)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/resources/icon_filter.png</normaloff>:/resources/icon_filter.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="shortcut">
+          <string>Ctrl+F</string>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::NoArrow</enum>
+         </property>
+        </widget>
+        <widget class="QToolButton" name="toolButtonCopyLine">
+         <property name="geometry">
+          <rect>
+           <x>170</x>
+           <y>0</y>
+           <width>36</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copy Line (Ctrl+Left Mouse Click&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/resources/icon_copy.png</normaloff>:/resources/icon_copy.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::NoArrow</enum>
+         </property>
+        </widget>
+        <widget class="QToolButton" name="toolButtonCopyMultipleLines">
+         <property name="geometry">
+          <rect>
+           <x>210</x>
+           <y>0</y>
+           <width>36</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copy Multiple Lines (Alt+C)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/resources/icon_multiple_copy.png</normaloff>:/resources/icon_multiple_copy.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="shortcut">
+          <string>Alt+C</string>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::NoArrow</enum>
+         </property>
+        </widget>
+        <widget class="QToolButton" name="toolButtonSettings">
+         <property name="geometry">
+          <rect>
+           <x>350</x>
+           <y>0</y>
+           <width>36</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Settings...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/resources/icon_settings.png</normaloff>:/resources/icon_settings.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::NoArrow</enum>
+         </property>
+        </widget>
+        <widget class="QToolButton" name="toolButtonHelp">
+         <property name="geometry">
+          <rect>
+           <x>390</x>
+           <y>0</y>
+           <width>36</width>
+           <height>36</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Help... (F1)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/resources/icon_help.png</normaloff>:/resources/icon_help.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="shortcut">
+          <string>F1</string>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::NoArrow</enum>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="PlainTextEdit" name="plainTextEdit">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>1</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Courier New</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::DefaultContextMenu</enum>
+        </property>
+        <property name="autoFillBackground">
+         <bool>true</bool>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="lineWidth">
+         <number>2</number>
+        </property>
+        <property name="lineWrapMode">
+         <enum>QPlainTextEdit::NoWrap</enum>
+        </property>
+        <property name="backgroundVisible">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
    </layout>
   </widget>
   <action name="actionCopy_Text">
@@ -215,11 +693,11 @@
  </customwidgets>
  <tabstops>
   <tabstop>lineEditSearch</tabstop>
-  <tabstop>plainTextEdit</tabstop>
   <tabstop>pushButtonMenu</tabstop>
   <tabstop>toolButtonNext</tabstop>
-  <tabstop>toolButtonPrevious</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

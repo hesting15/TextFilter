@@ -7,6 +7,7 @@
 #include <QScrollBar>
 #include <settings.h>
 #include <QMessageBox>
+#include <QPainter>
 
 static const int NO_CURRENT_FILTERED_LINE_NUMBER = -1;
 
@@ -16,6 +17,12 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     mInFilterMode(false),
     mButtonPressedWhileFiltering(false)
 {
+    lineNumberArea = new LineNumberArea(this);
+
+    connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
+    connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
+
+    updateLineNumberAreaWidth(0);
 }
 
 void PlainTextEdit::mousePressEvent(QMouseEvent *event)
@@ -170,7 +177,7 @@ void PlainTextEdit::gotoNextFilteredLine()
                 mCurrentFilteredLineNumber = 0;
             }
         }
-        highlightCurrentLine();
+        highlightFilteredLine();
     }
 }
 
@@ -200,7 +207,7 @@ void PlainTextEdit::gotoPreviousFilteredLine()
                 mCurrentFilteredLineNumber =  mFilteredLines.size() - 1;
             }
         }
-        highlightCurrentLine();
+        highlightFilteredLine();
     }
 }
 
@@ -218,7 +225,7 @@ void PlainTextEdit::reapplyFilterIfNeeded()
     }
 }
 
-void PlainTextEdit::highlightCurrentLine()
+void PlainTextEdit::highlightFilteredLine()
 {
     FilteredLine filteredLine = mFilteredLines[mCurrentFilteredLineNumber];
     QTextCursor cursor(document()->findBlockByNumber(filteredLine.lineNumber));
@@ -275,5 +282,77 @@ void PlainTextEdit::higlightTextInLine(const int lineNumber, const bool highligh
         cursor.setPosition(beginningOfLine + highlightPosition.first,  QTextCursor::MoveAnchor);
         cursor.setPosition(beginningOfLine + highlightPosition.second, QTextCursor::KeepAnchor);
         cursor.setCharFormat(fmt);
+    }
+}
+
+int PlainTextEdit::lineNumberAreaWidth()
+{
+    int digits = 1;
+    int max = qMax(1, blockCount());
+    while (max >= 10)
+    {
+        max /= 10;
+        ++digits;
+    }
+
+    int space = 8 + fontMetrics().width(QLatin1Char('9')) * digits;
+
+    return space;
+}
+
+void PlainTextEdit::updateLineNumberAreaWidth(int /* newBlockCount */)
+{
+    setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
+}
+
+void PlainTextEdit::updateLineNumberArea(const QRect &rect, int dy)
+{
+    if (dy)
+    {
+        lineNumberArea->scroll(0, dy);
+    }
+    else
+    {
+        lineNumberArea->update(0, rect.y(), lineNumberArea->width(), rect.height());
+    }
+
+    if (rect.contains(viewport()->rect()))
+    {
+        updateLineNumberAreaWidth(0);
+    }
+}
+
+void PlainTextEdit::resizeEvent(QResizeEvent *e)
+{
+    QPlainTextEdit::resizeEvent(e);
+
+    QRect cr = contentsRect();
+    lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+}
+
+void PlainTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
+{
+    QPainter painter(lineNumberArea);
+    painter.fillRect(event->rect(), QColor(233,233,233));
+
+    QTextBlock block = firstVisibleBlock();
+    int blockNumber = block.blockNumber();
+    int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
+    int bottom = top + (int) blockBoundingRect(block).height();
+
+    while (block.isValid() && top <= event->rect().bottom())
+    {
+        if (block.isVisible() && bottom >= event->rect().top())
+        {
+            QString number = QString::number(blockNumber + 1);
+            painter.setPen(QColor(140,140,140));
+            painter.drawText(0, top, lineNumberArea->width()-5, fontMetrics().height(),
+                             Qt::AlignRight, number);
+        }
+
+        block = block.next();
+        top = bottom;
+        bottom = top + (int) blockBoundingRect(block).height();
+        ++blockNumber;
     }
 }

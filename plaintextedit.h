@@ -3,6 +3,8 @@
 #include <QPlainTextEdit>
 #include <memo.h>
 
+
+
 class PlainTextEdit : public QPlainTextEdit
 {
     Q_OBJECT
@@ -21,12 +23,23 @@ public:
     void saveFile(const QString &filename);
     void gotoNextFilteredLine();
     void gotoPreviousFilteredLine();
+    void highlightEverySecondLine();
+
+    void lineNumberAreaPaintEvent(QPaintEvent *event);
+    int lineNumberAreaWidth();
 protected:
     void mousePressEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);
     void keyPressEvent(QKeyEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
+
+private slots:
+    void updateLineNumberAreaWidth(int newBlockCount);
+    void updateLineNumberArea(const QRect &, int);
 
 private:
+    QWidget *lineNumberArea;
+
     Memo mMemo;
     QString mFilter;
     bool mIsFiltering;
@@ -35,11 +48,32 @@ private:
     std::vector<FilteredLine> mFilteredLines;
     int mCurrentFilteredLineNumber;
 
-    void highlightCurrentLine();
+    void highlightFilteredLine();
     void higlightTextInLine(const int lineNumber, const bool highlight, std::vector<std::pair<int, int>> highlightPositions);
     void reapplyFilterIfNeeded();
     void clearHighlighting();
     int getCurrentLineNumber(QTextCursor cursor);
+};
+
+
+class LineNumberArea : public QWidget
+{
+public:
+    LineNumberArea(PlainTextEdit *editor) : QWidget(editor) {
+        codeEditor = editor;
+    }
+
+    QSize sizeHint() const override {
+        return QSize(codeEditor->lineNumberAreaWidth(), 0);
+    }
+
+protected:
+    void paintEvent(QPaintEvent *event) override {
+        codeEditor->lineNumberAreaPaintEvent(event);
+    }
+
+private:
+    PlainTextEdit *codeEditor;
 };
 
 #endif // PLAINTEXTEDIT_H

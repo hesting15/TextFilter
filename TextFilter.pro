@@ -46,3 +46,6 @@ RC_ICONS += Icon64.ico
 
 DISTFILES += \
     README.md
+
+RESOURCES += \
+    resources.qrc
