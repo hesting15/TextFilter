@@ -13,10 +13,11 @@ Features:
 - Press `Alt+C` several times to extend selection and copy multiple lines to clipboard
 
 Application is written in `Qt Creator`
+
 Icons are taken from sites:
 - http://www.iconarchive.com
 - http://www.iconsmind.com
 - http://icons8.com
 
-Download latest version:
+**Download** latest version:
 - [Windows](https://github.com/hesting15/TextFilter/releases)
