@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->widgetMenu->setVisible(false);
+    ui->widgetMenu->setMinimumSize(0, 0);
     restoreGeometry(Settings::getInstance().getWindowGeometry());
     loadSettings();
     loadTextFromFile();
@@ -231,13 +231,15 @@ void MainWindow::on_toolButtonHelp_clicked()
                              QMessageBox::Ok);
 }
 
-void MainWindow::on_pushButtonMenu_clicked()
-{
-    ui->widgetMenu->setVisible(!ui->widgetMenu->isVisible());
-}
-
 void MainWindow::on_toolButtonWordWrap_clicked()
 {
     Settings::getInstance().setWordWrap(!Settings::getInstance().isWordWrap());
     setWordWrap();
+}
+
+void MainWindow::on_pushButtonMenu_clicked(bool checked)
+{
+    // Shortcuts does not work when control is not visible
+    // ui->widgetMenu->setVisible(!ui->widgetMenu->isVisible());
+    ui->widgetMenu->setMinimumSize(0, checked ? 40 : 0);
 }

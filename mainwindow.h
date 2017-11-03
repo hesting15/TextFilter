@@ -34,7 +34,7 @@ private slots:
     void on_toolButtonHelp_clicked();
     void on_toolButtonWordWrap_clicked();
 
-    void on_pushButtonMenu_clicked();
+    void on_pushButtonMenu_clicked(bool checked);
 
 private:
     void loadSettings();
