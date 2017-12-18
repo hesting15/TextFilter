@@ -21,3 +21,9 @@ Icons are taken from sites:
 
 **Download** latest version:
 - [Windows](https://github.com/hesting15/TextFilter/releases)
+- Linux:
+```
+wget https://github.com/hesting15/TextFilter/releases/download/v1.4/TextFilter.AppImage
+chmod a+x TextFilter.AppImage
+./TextFilter.AppImage
+```
