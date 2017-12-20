@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include "settingswindow.h"
 #include "settings.h"
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     on_pushButtonMenu_clicked(false);
+    ui->frameInfo->setVisible(false);
     restoreGeometry(Settings::getInstance().getWindowGeometry());
     loadSettings();
     loadTextFromFile();
@@ -97,6 +99,15 @@ void MainWindow::saveFile()
     }
 
     ui->plainTextEdit->saveFile(filename);
+
+    on_pushButtonMenu_clicked(false);
+    ui->frameInfo->setVisible(true);
+    QTimer::singleShot(2000, this, SLOT(hideFrameInfo()));
+}
+
+void MainWindow::hideFrameInfo()
+{
+    ui->frameInfo->setVisible(false);
 }
 
 void MainWindow::on_lineEditSearch_returnPressed()
