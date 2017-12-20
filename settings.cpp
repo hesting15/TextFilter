@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QSettings>
 #include <QDesktopWidget>
+#include <QStandardPaths>
 
 const static QString cFilename        = "FILE_NAME";
 const static QString cFontName        = "FONT_NAME";
@@ -15,7 +16,7 @@ const static QString cWordWrap        = "WORD_WRAP";
 
 Settings::Settings()
 {
-    mIniPath = QApplication::applicationDirPath() + "/TextFilter.ini";
+    mIniPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.TextFilter.ini";
 
     QSettings settings(mIniPath, QSettings::IniFormat);
     mFilename = settings.value(cFilename, "").toString();
