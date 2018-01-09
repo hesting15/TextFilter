@@ -35,6 +35,7 @@ private slots:
     void on_toolButtonWordWrap_clicked();
 
     void on_pushButtonMenu_clicked(bool checked);
+    void hideFrameInfo();
 
 private:
     void loadSettings();
