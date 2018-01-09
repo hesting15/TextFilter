@@ -6,6 +6,7 @@ License: LGPL-3.0
 Group: Applications/Text
 BuildRoot: /var/tmp/%{name}-buildroot
 
+
 %description
 Text Filter
 * Use fuzzy match to filter text (e.g. 'ore psu' will find 'Lorem Ipsum').
