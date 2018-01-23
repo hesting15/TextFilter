@@ -236,11 +236,15 @@ void PlainTextEdit::highlightFilteredLine()
 
     higlightTextInLine(filteredLine.lineNumber, true, filteredLine.highlightPositions);
     setTextCursor(cursor);
+    int currentLine = getCurrentLineNumber(cursor);
+    setCurrentLineNumber(currentLine);
+}
 
+void PlainTextEdit::setCurrentLineNumber(const int lineNumber)
+{
     // Show current line in the middle of the text edit
     int numberOfVisibleLines = height() / fontMetrics().height();
-    int currentLine = getCurrentLineNumber(cursor);
-    verticalScrollBar()->setValue(currentLine - numberOfVisibleLines/2);
+    verticalScrollBar()->setValue(lineNumber - numberOfVisibleLines/2);
 }
 
 int PlainTextEdit::getCurrentLineNumber(QTextCursor cursor)

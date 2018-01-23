@@ -40,9 +40,21 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::on_lineEditSearch_textChanged(const QString &filter)
 {
+    // set cursor position to last filtered position
+    int currentLine = 0;
+    if (filter.isEmpty() && !ui->plainTextEdit->isInFilterMode())
+    {
+        currentLine = ui->plainTextEdit->getCurrentLineNumber(ui->plainTextEdit->textCursor());
+    }
+
     const int filteredLinesCount = ui->plainTextEdit->applyFilter(filter);
     ui->toolButtonPrevious->setEnabled(filteredLinesCount>0);
     ui->toolButtonNext->setEnabled(filteredLinesCount>0);
+
+    if (currentLine)
+    {
+        ui->plainTextEdit->setCurrentLineNumber(currentLine);
+    }
 }
 
 void MainWindow::loadTextFromFile()
@@ -91,6 +103,14 @@ void MainWindow::loadFile(const QString &filename)
 
 void MainWindow::saveFile()
 {
+    if (ui->plainTextEdit->isFiltering())
+    {
+        QMessageBox::warning(this, tr("Text Filter"),
+                             tr("Cannot save file while text is filtered"),
+                             QMessageBox::Close);
+        return;
+    }
+
     const QString filename = Settings::getInstance().getFilename();
     if (filename.isEmpty())
     {
@@ -254,4 +274,5 @@ void MainWindow::on_pushButtonMenu_clicked(bool checked)
     //ui->widgetMenu->setVisible(!checked);
     ui->widgetMenu->setMinimumSize(0, checked ? 40 : 0);
     ui->widgetMenu->setMaximumSize(16777215, checked ? 40 : 0);
+    ui->pushButtonMenu->setChecked(checked);
 }

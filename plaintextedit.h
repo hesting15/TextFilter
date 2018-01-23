@@ -14,7 +14,8 @@ public:
 
     QBrush getDefaultBackgroungColor();
 
-    bool isFiltering() { return mIsFiltering; }
+    bool isFiltering()    { return mIsFiltering;  }
+    bool isInFilterMode() { return mInFilterMode; }
     int applyFilter(const QString &filter);
     void clearFilterAndLoadTextFromFile();
     void loadTextFromFile();
@@ -27,6 +28,9 @@ public:
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
+    int getCurrentLineNumber(QTextCursor cursor);
+    void setCurrentLineNumber(const int lineNumber);
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);
@@ -52,7 +56,6 @@ private:
     void higlightTextInLine(const int lineNumber, const bool highlight, std::vector<std::pair<int, int>> highlightPositions);
     void reapplyFilterIfNeeded();
     void clearHighlighting();
-    int getCurrentLineNumber(QTextCursor cursor);
 };
 
 
