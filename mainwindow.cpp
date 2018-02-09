@@ -76,6 +76,8 @@ void MainWindow::loadTextFromFile()
     ui->lineEditSearch->clear();
     ui->toolButtonPrevious->setEnabled(false);
     ui->toolButtonNext->setEnabled(false);
+    QString filename = Settings::getInstance().getFilename();
+    setWindowTitle(filename + (filename.isEmpty() ? "" : " - ") + "Text Filter");
 }
 
 void MainWindow::setAlwaysOnTop()
@@ -128,6 +130,7 @@ void MainWindow::loadFile(const QString &filename)
     Settings::getInstance().setFilename(filename);
     Settings::getInstance().addRecentFile(filename);
     setRecentFiles();
+    setWindowTitle(filename + " - Text Filter");
 }
 
 void MainWindow::saveFile()
