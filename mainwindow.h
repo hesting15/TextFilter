@@ -33,9 +33,11 @@ private slots:
     void on_toolButtonSettings_clicked();
     void on_toolButtonHelp_clicked();
     void on_toolButtonWordWrap_clicked();
-
+    void on_toolButtonNewFile_clicked();
     void on_pushButtonMenu_clicked(bool checked);
     void hideFrameInfo();
+
+    void on_plainTextEdit_textChanged();
 
 private:
     void loadSettings();

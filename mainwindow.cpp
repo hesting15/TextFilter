@@ -35,7 +35,15 @@ void MainWindow::loadSettings()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     Settings::getInstance().setWindowGeometry(saveGeometry());
-    QMainWindow::closeEvent(event);
+    if (ui->plainTextEdit->isOriginalTextChanged())
+    {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Text Filter", "Quit without saving?", QMessageBox::Yes|QMessageBox::No);
+        if (reply == QMessageBox::No)
+        {
+            event->ignore();
+        }
+    }
 }
 
 void MainWindow::on_lineEditSearch_textChanged(const QString &filter)
@@ -119,10 +127,12 @@ void MainWindow::saveFile()
     }
 
     ui->plainTextEdit->saveFile(filename);
+    ui->toolButtonSaveFile->setIcon(QIcon(":/resources/icon_save.png"));
 
     on_pushButtonMenu_clicked(false);
     ui->frameInfo->setVisible(true);
     QTimer::singleShot(2000, this, SLOT(hideFrameInfo()));
+
 }
 
 void MainWindow::hideFrameInfo()
@@ -276,3 +286,19 @@ void MainWindow::on_pushButtonMenu_clicked(bool checked)
     ui->widgetMenu->setMaximumSize(16777215, checked ? 40 : 0);
     ui->pushButtonMenu->setChecked(checked);
 }
+
+void MainWindow::on_toolButtonNewFile_clicked()
+{
+    ui->plainTextEdit->applyFilter("");
+    ui->plainTextEdit->clear();
+    ui->lineEditSearch->clear();
+}
+
+void MainWindow::on_plainTextEdit_textChanged()
+{
+    if(ui->plainTextEdit->isOriginalTextChanged())
+    {
+        ui->toolButtonSaveFile->setIcon(QIcon(":/resources/icon_save_changed.png"));
+    }
+}
+

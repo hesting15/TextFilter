@@ -15,7 +15,8 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     QPlainTextEdit(parent),
     mIsFiltering(false),
     mInFilterMode(false),
-    mButtonPressedWhileFiltering(false)
+    mButtonPressedWhileFiltering(false),
+    mIsOriginalTextChanged(false)
 {
     lineNumberArea = new LineNumberArea(this);
 
@@ -66,6 +67,10 @@ void PlainTextEdit::keyPressEvent(QKeyEvent *event)
     {
         mButtonPressedWhileFiltering = true;
         clearHighlighting();
+    }
+    else if(!mIsFiltering && !mInFilterMode)
+    {
+        mIsOriginalTextChanged = true;
     }
     QPlainTextEdit::keyPressEvent(event);
 }
@@ -144,6 +149,7 @@ void PlainTextEdit::saveFile(const QString &filename)
     try
     {
         mMemo.saveFile(filename);
+        mIsOriginalTextChanged = false;
     }
     catch(const std::runtime_error& ex)
     {

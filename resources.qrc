@@ -11,5 +11,7 @@
         <file>resources/icon_settings.png</file>
         <file>resources/icon_help.png</file>
         <file>resources/icon_menu.png</file>
+        <file>resources/icon_new_file.png</file>
+        <file>resources/icon_save_changed.png</file>
     </qresource>
 </RCC>

@@ -14,8 +14,9 @@ public:
 
     QBrush getDefaultBackgroungColor();
 
-    bool isFiltering()    { return mIsFiltering;  }
-    bool isInFilterMode() { return mInFilterMode; }
+    bool isFiltering()           { return mIsFiltering;  }
+    bool isInFilterMode()        { return mInFilterMode; }
+    bool isOriginalTextChanged() { return mIsOriginalTextChanged; }
     int applyFilter(const QString &filter);
     void clearFilterAndLoadTextFromFile();
     void loadTextFromFile();
@@ -51,6 +52,7 @@ private:
     bool mButtonPressedWhileFiltering;
     std::vector<FilteredLine> mFilteredLines;
     int mCurrentFilteredLineNumber;
+    bool mIsOriginalTextChanged;
 
     void highlightFilteredLine();
     void higlightTextInLine(const int lineNumber, const bool highlight, std::vector<std::pair<int, int>> highlightPositions);
