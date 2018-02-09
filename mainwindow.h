@@ -15,6 +15,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
 protected:
     void closeEvent(QCloseEvent *event);
 private slots:
@@ -36,6 +37,7 @@ private slots:
     void on_toolButtonNewFile_clicked();
     void on_pushButtonMenu_clicked(bool checked);
     void hideFrameInfo();
+    void openRecent();
 
     void on_plainTextEdit_textChanged();
 
@@ -49,6 +51,7 @@ private:
     void loadTextFromFile();
 
     Ui::MainWindow *ui;
+    void setRecentFiles();
 };
 
 #endif // MAINWINDOW_H

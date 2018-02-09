@@ -25,6 +25,7 @@ public:
     bool isAlwaysOnTop()           { return mAlwaysOnTop;     }
     int getFilterThreshold()       { return mFilterThreshold; }
     bool isWordWrap()              { return mWordWrap;        }
+    QStringList getRecentFiles()   { return mRecentFiles;     }
 
     void setFilename(const QString &filename);
     void setFont(const QFont &font);
@@ -32,19 +33,21 @@ public:
     void setAlwaysOnTop(const bool alwaysOnTop);
     void setFilterThreshold(const int filterThreshold);
     void setWordWrap(const bool wordWrap);
+    void addRecentFile(const QString &filename);
 
 private:
     Settings();
 
     void saveSettings();
 
-    QString    mIniPath;
-    QString    mFilename;
-    QFont      mFont;
-    QByteArray mGeometry;
-    bool       mAlwaysOnTop;
-    int        mFilterThreshold;
-    bool       mWordWrap;
+    QString     mIniPath;
+    QString     mFilename;
+    QFont       mFont;
+    QByteArray  mGeometry;
+    bool        mAlwaysOnTop;
+    int         mFilterThreshold;
+    bool        mWordWrap;
+    QStringList mRecentFiles;
 };
 
 #endif // SETTINGS_H

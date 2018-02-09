@@ -30,6 +30,7 @@ void MainWindow::loadSettings()
     ui->plainTextEdit->setFont(Settings::getInstance().getFont());
     setAlwaysOnTop();
     setWordWrap();
+    setRecentFiles();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -38,8 +39,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
     if (ui->plainTextEdit->isOriginalTextChanged())
     {
         QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this, "Text Filter", "Quit without saving?", QMessageBox::Yes|QMessageBox::No);
-        if (reply == QMessageBox::No)
+        reply = QMessageBox::question(this, "Text Filter", "Save before quit?", QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
+        if (reply == QMessageBox::Yes)
+        {
+            saveFile();
+        }
+        else if (reply == QMessageBox::Cancel)
         {
             event->ignore();
         }
@@ -104,9 +109,25 @@ void MainWindow::loadFile(const QString &filename)
         return;
     }
 
+    if (ui->plainTextEdit->isOriginalTextChanged())
+    {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Text Filter", "Save changed file?", QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
+        if (reply == QMessageBox::Yes)
+        {
+            saveFile();
+        }
+        else if (reply == QMessageBox::Cancel)
+        {
+            return;
+        }
+    }
+
     ui->lineEditSearch->clear();
     ui->plainTextEdit->loadFile(filename);
     Settings::getInstance().setFilename(filename);
+    Settings::getInstance().addRecentFile(filename);
+    setRecentFiles();
 }
 
 void MainWindow::saveFile()
@@ -302,3 +323,25 @@ void MainWindow::on_plainTextEdit_textChanged()
     }
 }
 
+void MainWindow::setRecentFiles()
+{
+    for (auto* action : ui->toolButtonOpenFile->actions())
+    {
+        ui->toolButtonOpenFile->removeAction(action);
+        delete action;
+    }
+
+    QStringList recentFiles = Settings::getInstance().getRecentFiles();
+    for (const QString& filename : recentFiles)
+    {
+        QAction* recentFile = new QAction(filename, this);
+        QObject::connect(recentFile, SIGNAL(triggered()), this, SLOT(openRecent()));
+        ui->toolButtonOpenFile->addAction(recentFile);
+    }
+}
+
+void MainWindow::openRecent()
+{
+     QAction* action = qobject_cast<QAction *>(sender());
+     loadFile(action->text());
+}

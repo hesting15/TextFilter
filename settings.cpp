@@ -13,6 +13,7 @@ const static QString cGeometry        = "GEOMETRY";
 const static QString cAlwaysOnTop     = "ALWAYS_ON_TOP";
 const static QString cFilterThreshold = "FILTER_THRESHOLD";
 const static QString cWordWrap        = "WORD_WRAP";
+const static QString cRecentFiles     = "RECENT_FILES";
 
 Settings::Settings()
 {
@@ -31,6 +32,8 @@ Settings::Settings()
 
     mFont = QFont(fontName, fontSize);
     mFont.setBold(fontBold);
+
+    mRecentFiles = settings.value(cRecentFiles).toStringList();
 }
 
 void Settings::saveSettings()
@@ -44,6 +47,7 @@ void Settings::saveSettings()
     settings.setValue(cAlwaysOnTop, mAlwaysOnTop);
     settings.setValue(cFilterThreshold, mFilterThreshold);
     settings.setValue(cWordWrap, mWordWrap);
+    settings.setValue(cRecentFiles, mRecentFiles);
 }
 
 void Settings::setFilename(const QString &filename)
@@ -79,5 +83,18 @@ void Settings::setFilterThreshold(const int filterThreshold)
 void Settings::setWordWrap(const bool wordWrap)
 {
     mWordWrap = wordWrap;
+    saveSettings();
+}
+
+void Settings::addRecentFile(const QString& filename)
+{
+    for (int i = mRecentFiles.count() - 1; i >= 0; --i)
+    {
+        if (mRecentFiles[i] == filename || i > 8)
+        {
+            mRecentFiles.removeAt(i);
+        }
+    }
+    mRecentFiles.push_front(filename);
     saveSettings();
 }
