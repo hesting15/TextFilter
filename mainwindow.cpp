@@ -131,6 +131,7 @@ void MainWindow::loadFile(const QString &filename)
     Settings::getInstance().addRecentFile(filename);
     setRecentFiles();
     setWindowTitle(filename + " - Text Filter");
+    setSaveButtonIcon(false);
 }
 
 void MainWindow::saveFile()
@@ -151,7 +152,7 @@ void MainWindow::saveFile()
     }
 
     ui->plainTextEdit->saveFile(filename);
-    ui->toolButtonSaveFile->setIcon(QIcon(":/resources/icon_save.png"));
+    setSaveButtonIcon(false);
 
     on_pushButtonMenu_clicked(false);
     ui->frameInfo->setVisible(true);
@@ -322,7 +323,7 @@ void MainWindow::on_plainTextEdit_textChanged()
 {
     if(ui->plainTextEdit->isOriginalTextChanged())
     {
-        ui->toolButtonSaveFile->setIcon(QIcon(":/resources/icon_save_changed.png"));
+        setSaveButtonIcon(true);
     }
 }
 
@@ -347,4 +348,11 @@ void MainWindow::openRecent()
 {
      QAction* action = qobject_cast<QAction *>(sender());
      loadFile(action->text());
+}
+
+void MainWindow::setSaveButtonIcon(bool changed)
+{
+    QString icon = changed ? ":/resources/icon_save_changed.png"
+                           : ":/resources/icon_save.png";
+    ui->toolButtonSaveFile->setIcon(QIcon(icon));
 }

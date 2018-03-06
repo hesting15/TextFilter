@@ -52,6 +52,7 @@ private:
 
     Ui::MainWindow *ui;
     void setRecentFiles();
+    void setSaveButtonIcon(bool changed);
 };
 
 #endif // MAINWINDOW_H

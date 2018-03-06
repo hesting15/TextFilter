@@ -140,6 +140,7 @@ void PlainTextEdit::loadFile(const QString &filename)
     mIsFiltering = false;
     mMemo.loadFile(filename);
     loadTextFromFile();
+    mIsOriginalTextChanged = false;
 }
 
 void PlainTextEdit::saveFile(const QString &filename)
