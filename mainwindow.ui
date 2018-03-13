@@ -665,7 +665,7 @@
           </size>
          </property>
          <property name="text">
-          <string> File saved sueccessfully</string>
+          <string> File saved successfully</string>
          </property>
         </widget>
        </widget>

@@ -138,10 +138,7 @@ void MainWindow::saveFile()
 {
     if (ui->plainTextEdit->isFiltering())
     {
-        QMessageBox::warning(this, tr("Text Filter"),
-                             tr("Cannot save file while text is filtered"),
-                             QMessageBox::Close);
-        return;
+        on_lineEditSearch_textChanged("");
     }
 
     const QString filename = Settings::getInstance().getFilename();
@@ -202,6 +199,7 @@ void MainWindow::on_toolButtonSaveFileAs_clicked()
     {
         Settings::getInstance().setFilename(fileName);
         saveFile();
+        setWindowTitle(fileName + " - Text Filter");
     }
 }
 
@@ -317,6 +315,8 @@ void MainWindow::on_toolButtonNewFile_clicked()
     ui->plainTextEdit->applyFilter("");
     ui->plainTextEdit->clear();
     ui->lineEditSearch->clear();
+    Settings::getInstance().setFilename("");
+    setWindowTitle("Untitled - Text Filter");
 }
 
 void MainWindow::on_plainTextEdit_textChanged()
