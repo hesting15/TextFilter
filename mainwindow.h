@@ -53,6 +53,7 @@ private:
     Ui::MainWindow *ui;
     void setRecentFiles();
     void setSaveButtonIcon(bool changed);
+    void updateFilename(const QString& filename);
 };
 
 #endif // MAINWINDOW_H

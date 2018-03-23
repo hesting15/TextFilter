@@ -127,11 +127,7 @@ void MainWindow::loadFile(const QString &filename)
 
     ui->lineEditSearch->clear();
     ui->plainTextEdit->loadFile(filename);
-    Settings::getInstance().setFilename(filename);
-    Settings::getInstance().addRecentFile(filename);
-    setRecentFiles();
-    setWindowTitle(filename + " - Text Filter");
-    setSaveButtonIcon(false);
+    updateFilename(filename);
 }
 
 void MainWindow::saveFile()
@@ -149,12 +145,21 @@ void MainWindow::saveFile()
     }
 
     ui->plainTextEdit->saveFile(filename);
-    setSaveButtonIcon(false);
+    updateFilename(filename);
 
     on_pushButtonMenu_clicked(false);
     ui->frameInfo->setVisible(true);
     QTimer::singleShot(2000, this, SLOT(hideFrameInfo()));
 
+}
+
+void MainWindow::updateFilename(const QString &filename)
+{
+    Settings::getInstance().setFilename(filename);
+    Settings::getInstance().addRecentFile(filename);
+    setRecentFiles();
+    setWindowTitle(filename + " - Text Filter");
+    setSaveButtonIcon(false);
 }
 
 void MainWindow::hideFrameInfo()
@@ -179,10 +184,10 @@ void MainWindow::on_toolButtonNext_clicked()
 
 void MainWindow::on_toolButtonOpenFile_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,
+    QString filename = QFileDialog::getOpenFileName(this,
                                                     tr("Open File"), "",
                                                     tr("Text File (*.txt);;All Files (*)"));
-    loadFile(fileName);
+    loadFile(filename);
 }
 
 void MainWindow::on_toolButtonSaveFile_clicked()
@@ -192,14 +197,14 @@ void MainWindow::on_toolButtonSaveFile_clicked()
 
 void MainWindow::on_toolButtonSaveFileAs_clicked()
 {
-    QString fileName = QFileDialog::getSaveFileName(this,
+    QString filename = QFileDialog::getSaveFileName(this,
                                                     tr("Save File"), "",
                                                     tr("Text File (*.txt);;All Files (*)"));
-    if (!fileName.isEmpty())
+    if (!filename.isEmpty())
     {
-        Settings::getInstance().setFilename(fileName);
+        Settings::getInstance().setFilename(filename);
         saveFile();
-        setWindowTitle(fileName + " - Text Filter");
+        setWindowTitle(filename + " - Text Filter");
     }
 }
 
@@ -285,7 +290,7 @@ void MainWindow::on_toolButtonSettings_clicked()
 void MainWindow::on_toolButtonHelp_clicked()
 {
     QMessageBox::information(this, tr("Text Filter"),
-                             tr("Text Filter v1.4\n\n"
+                             tr("Text Filter v1.5\n\n"
                                 " * Use fuzzy match to filter text (e.g. 'ore psu' will find 'Lorem Ipsum').\n"
                                 " * Press Enter in the Filter field to go to the next filter result.\n"
                                 " * Use Ctrl + Left Mouse Click on the line, to copy whole line to clipboard.\n"
@@ -352,7 +357,11 @@ void MainWindow::openRecent()
 
 void MainWindow::setSaveButtonIcon(bool changed)
 {
-    QString icon = changed ? ":/resources/icon_save_changed.png"
-                           : ":/resources/icon_save.png";
-    ui->toolButtonSaveFile->setIcon(QIcon(icon));
+    QString saveIcon = changed ? ":/resources/icon_save_changed.png"
+                               : ":/resources/icon_save.png";
+    ui->toolButtonSaveFile->setIcon(QIcon(saveIcon));
+
+    QString menuIcon = changed ? ":/resources/icon_menu_changed.png"
+                               : ":/resources/icon_menu.png";
+    ui->pushButtonMenu->setIcon(QIcon(menuIcon));
 }

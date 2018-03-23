@@ -652,20 +652,20 @@
         <widget class="QLabel" name="label">
          <property name="geometry">
           <rect>
-           <x>40</x>
-           <y>0</y>
+           <x>2</x>
+           <y>-1</y>
            <width>261</width>
-           <height>20</height>
+           <height>18</height>
           </rect>
          </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>20</height>
+           <height>18</height>
           </size>
          </property>
          <property name="text">
-          <string> File saved successfully</string>
+          <string> File saved</string>
          </property>
         </widget>
        </widget>
