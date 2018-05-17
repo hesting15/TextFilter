@@ -68,10 +68,6 @@ void PlainTextEdit::keyPressEvent(QKeyEvent *event)
         mButtonPressedWhileFiltering = true;
         clearHighlighting();
     }
-    else if(!mIsFiltering && !mInFilterMode)
-    {
-        mIsOriginalTextChanged = true;
-    }
     QPlainTextEdit::keyPressEvent(event);
 }
 
@@ -365,5 +361,13 @@ void PlainTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
         top = bottom;
         bottom = top + (int) blockBoundingRect(block).height();
         ++blockNumber;
+    }
+}
+
+void PlainTextEdit::updateIsOriginalTextChanged()
+{
+    if (!mIsFiltering && !mInFilterMode)
+    {
+        mIsOriginalTextChanged = mMemo.isTextChanged(toPlainText());
     }
 }

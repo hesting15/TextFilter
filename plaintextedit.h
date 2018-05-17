@@ -32,6 +32,7 @@ public:
     int getCurrentLineNumber(QTextCursor cursor);
     void setCurrentLineNumber(const int lineNumber);
 
+    void updateIsOriginalTextChanged();
 protected:
     void mousePressEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);

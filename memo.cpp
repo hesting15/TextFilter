@@ -22,6 +22,7 @@ void Memo::loadFile(const QString &fileName)
     file.open(QFile::ReadWrite | QFile::Text);
     QTextStream readFile(&file);
     mText = readFile.readAll();
+    mOriginalText = mText;
 }
 
 void Memo::saveFile(const QString &fileName)
@@ -33,6 +34,7 @@ void Memo::saveFile(const QString &fileName)
     }
 
     file.write(mText.toUtf8());
+    mOriginalText = mText;
 }
 
 void Memo::filterText(const QString &filter, std::vector<FilteredLine> &filteredLines)
@@ -68,4 +70,9 @@ void Memo::filterText(const QString &filter, std::vector<FilteredLine> &filtered
         }
         ++lineNumber;
     }
+}
+
+bool Memo::isTextChanged(const QString& currentText)
+{
+    return currentText != mOriginalText;
 }

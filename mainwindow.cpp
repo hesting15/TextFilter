@@ -10,7 +10,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    canMarkBufferAsModified(false)
 {
     ui->setupUi(this);
     on_pushButtonMenu_clicked(false);
@@ -18,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     restoreGeometry(Settings::getInstance().getWindowGeometry());
     loadSettings();
     loadTextFromFile();
+    canMarkBufferAsModified = true;
 }
 
 MainWindow::~MainWindow()
@@ -53,6 +55,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::on_lineEditSearch_textChanged(const QString &filter)
 {
+    canMarkBufferAsModified = filter.isEmpty();
+
     // set cursor position to last filtered position
     int currentLine = 0;
     if (filter.isEmpty() && !ui->plainTextEdit->isInFilterMode())
@@ -326,9 +330,10 @@ void MainWindow::on_toolButtonNewFile_clicked()
 
 void MainWindow::on_plainTextEdit_textChanged()
 {
-    if(ui->plainTextEdit->isOriginalTextChanged())
+    if (canMarkBufferAsModified)
     {
-        setSaveButtonIcon(true);
+        ui->plainTextEdit->updateIsOriginalTextChanged();
+        setSaveButtonIcon(ui->plainTextEdit->isOriginalTextChanged());
     }
 }
 

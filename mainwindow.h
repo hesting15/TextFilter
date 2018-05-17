@@ -54,6 +54,7 @@ private:
     void setRecentFiles();
     void setSaveButtonIcon(bool changed);
     void updateFilename(const QString& filename);
+    bool canMarkBufferAsModified;
 };
 
 #endif // MAINWINDOW_H

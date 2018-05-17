@@ -22,8 +22,10 @@ public:
     void saveFile(const QString &fileName);
     void filterText(const QString &filter, std::vector<FilteredLine>& filteredLines);
 
+    bool isTextChanged(const QString& currentText);
 private:
     QString mText;
+    QString mOriginalText;
 };
 
 #endif // MEMO_H
