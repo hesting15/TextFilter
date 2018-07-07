@@ -37,19 +37,19 @@
      <enum>QLayout::SetDefaultConstraint</enum>
     </property>
     <property name="leftMargin">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="topMargin">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="rightMargin">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="bottomMargin">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="spacing">
-     <number>2</number>
+     <number>0</number>
     </property>
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0">
@@ -66,14 +66,14 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>30</width>
-          <height>30</height>
+          <width>28</width>
+          <height>28</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>30</width>
-          <height>30</height>
+          <width>28</width>
+          <height>28</height>
          </size>
         </property>
         <property name="text">
@@ -81,7 +81,13 @@
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
-          <normaloff>:/resources/icon_menu.png</normaloff>:/resources/icon_menu.png</iconset>
+          <normaloff>:/resources/128x128/menu.png</normaloff>:/resources/128x128/menu.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -99,13 +105,13 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>28</height>
+          <height>24</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>28</height>
+          <height>24</height>
          </size>
         </property>
         <property name="font">
@@ -137,14 +143,14 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>30</width>
-          <height>30</height>
+          <width>24</width>
+          <height>24</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>30</width>
-          <height>30</height>
+          <width>24</width>
+          <height>24</height>
          </size>
         </property>
         <property name="text">
@@ -159,14 +165,14 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>30</width>
-          <height>30</height>
+          <width>24</width>
+          <height>24</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>30</width>
-          <height>30</height>
+          <width>24</width>
+          <height>24</height>
          </size>
         </property>
         <property name="text">
@@ -192,14 +198,17 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>28</height>
+          <height>24</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>28</height>
+          <height>24</height>
          </size>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <property name="spacing">
@@ -221,8 +230,20 @@
           <widget class="QToolButton" name="toolButtonNewFile">
            <property name="minimumSize">
             <size>
-             <width>32</width>
-             <height>0</height>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>512</width>
+             <height>512</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
             </size>
            </property>
            <property name="toolTip">
@@ -233,7 +254,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/resources/icon_new_file.png</normaloff>:/resources/icon_new_file.png</iconset>
+             <normaloff>:/resources/128x128/new_file.png</normaloff>:/resources/128x128/new_file.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -265,7 +286,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/resources/icon_open.png</normaloff>:/resources/icon_open.png</iconset>
+             <normaloff>:/resources/128x128/open.png</normaloff>:/resources/128x128/open.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -295,6 +316,24 @@
          </item>
          <item>
           <widget class="QToolButton" name="toolButtonSaveFile">
+           <property name="minimumSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>512</width>
+             <height>512</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save File (Crtl+S)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
@@ -303,7 +342,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/resources/icon_save.png</normaloff>:/resources/icon_save.png</iconset>
+             <normaloff>:/resources/128x128/save.png</normaloff>:/resources/128x128/save.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -330,6 +369,24 @@
          </item>
          <item>
           <widget class="QToolButton" name="toolButtonSaveFileAs">
+           <property name="minimumSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>512</width>
+             <height>512</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sava File As...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
@@ -338,7 +395,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/resources/icon_save_as.png</normaloff>:/resources/icon_save_as.png</iconset>
+             <normaloff>:/resources/128x128/save_as.png</normaloff>:/resources/128x128/save_as.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -375,6 +432,24 @@
          </item>
          <item>
           <widget class="QToolButton" name="toolButtonFilterText">
+           <property name="minimumSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>512</width>
+             <height>512</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter Text (Crtl+F)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
@@ -383,7 +458,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/resources/icon_filter.png</normaloff>:/resources/icon_filter.png</iconset>
+             <normaloff>:/resources/128x128/filter.png</normaloff>:/resources/128x128/filter.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -410,6 +485,24 @@
          </item>
          <item>
           <widget class="QToolButton" name="toolButtonCopyLine">
+           <property name="minimumSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>512</width>
+             <height>512</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copy Line (Ctrl+Left Mouse Click&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
@@ -418,7 +511,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/resources/icon_copy.png</normaloff>:/resources/icon_copy.png</iconset>
+             <normaloff>:/resources/128x128/copy.png</normaloff>:/resources/128x128/copy.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -442,6 +535,24 @@
          </item>
          <item>
           <widget class="QToolButton" name="toolButtonCopyMultipleLines">
+           <property name="minimumSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>512</width>
+             <height>512</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copy Multiple Lines (Alt+C)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
@@ -450,7 +561,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/resources/icon_multiple_copy.png</normaloff>:/resources/icon_multiple_copy.png</iconset>
+             <normaloff>:/resources/128x128/multiple_copy.png</normaloff>:/resources/128x128/multiple_copy.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -490,6 +601,24 @@
          </item>
          <item>
           <widget class="QToolButton" name="toolButtonAlwaysOnTop">
+           <property name="minimumSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>512</width>
+             <height>512</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Always On Top&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
@@ -498,7 +627,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/resources/icon_on_top.png</normaloff>:/resources/icon_on_top.png</iconset>
+             <normaloff>:/resources/128x128/on_top.png</normaloff>:/resources/128x128/on_top.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -522,6 +651,24 @@
          </item>
          <item>
           <widget class="QToolButton" name="toolButtonWordWrap">
+           <property name="minimumSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>512</width>
+             <height>512</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wrap Text&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
@@ -530,7 +677,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/resources/icon_wrap_text.png</normaloff>:/resources/icon_wrap_text.png</iconset>
+             <normaloff>:/resources/128x128/wrap_text.png</normaloff>:/resources/128x128/wrap_text.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -567,6 +714,24 @@
          </item>
          <item>
           <widget class="QToolButton" name="toolButtonSettings">
+           <property name="minimumSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Settings...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
@@ -575,7 +740,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/resources/icon_settings.png</normaloff>:/resources/icon_settings.png</iconset>
+             <normaloff>:/resources/128x128/settings.png</normaloff>:/resources/128x128/settings.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -599,6 +764,24 @@
          </item>
          <item>
           <widget class="QToolButton" name="toolButtonHelp">
+           <property name="minimumSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Help... (F1)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
@@ -607,7 +790,7 @@
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/resources/icon_help.png</normaloff>:/resources/icon_help.png</iconset>
+             <normaloff>:/resources/128x128/help.png</normaloff>:/resources/128x128/help.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -640,6 +823,12 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
           <height>20</height>
          </size>
         </property>
@@ -700,10 +889,16 @@
          <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="lineWidth">
-         <number>2</number>
+         <number>1</number>
         </property>
         <property name="lineWrapMode">
          <enum>QPlainTextEdit::NoWrap</enum>
+        </property>
+        <property name="tabStopWidth">
+         <number>40</number>
+        </property>
+        <property name="cursorWidth">
+         <number>2</number>
         </property>
         <property name="backgroundVisible">
          <bool>false</bool>

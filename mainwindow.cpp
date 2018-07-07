@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     canMarkBufferAsModified(false)
 {
     ui->setupUi(this);
+
     on_pushButtonMenu_clicked(false);
     ui->frameInfo->setVisible(false);
     restoreGeometry(Settings::getInstance().getWindowGeometry());
@@ -362,11 +363,21 @@ void MainWindow::openRecent()
 
 void MainWindow::setSaveButtonIcon(bool changed)
 {
-    QString saveIcon = changed ? ":/resources/icon_save_changed.png"
-                               : ":/resources/icon_save.png";
-    ui->toolButtonSaveFile->setIcon(QIcon(saveIcon));
+    if (changed)
+    {
+        setIconMultipleResolutions(ui->pushButtonMenu,     "menu_changed.png");
+        setIconMultipleResolutions(ui->toolButtonSaveFile, "save_changed.png");
+    }
+    else
+    {
+        setIconMultipleResolutions(ui->pushButtonMenu,     "menu.png");
+        setIconMultipleResolutions(ui->toolButtonSaveFile, "save.png");
 
-    QString menuIcon = changed ? ":/resources/icon_menu_changed.png"
-                               : ":/resources/icon_menu.png";
-    ui->pushButtonMenu->setIcon(QIcon(menuIcon));
+    }
+}
+
+void MainWindow::setIconMultipleResolutions(QAbstractButton *button, const QString& iconName)
+{
+    QIcon icon(":/resources/128x128/" + iconName);
+    button->setIcon(icon);
 }

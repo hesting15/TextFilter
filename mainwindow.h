@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtWidgets/QAbstractButton>
 
 namespace Ui {
 class MainWindow;
@@ -55,6 +56,7 @@ private:
     void setSaveButtonIcon(bool changed);
     void updateFilename(const QString& filename);
     bool canMarkBufferAsModified;
+    void setIconMultipleResolutions(QAbstractButton *button, const QString &iconName);
 };
 
 #endif // MAINWINDOW_H
