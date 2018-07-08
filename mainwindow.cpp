@@ -295,11 +295,16 @@ void MainWindow::on_toolButtonSettings_clicked()
 void MainWindow::on_toolButtonHelp_clicked()
 {
     QMessageBox::information(this, tr("Text Filter"),
-                             tr("Text Filter v1.5\n\n"
+                             tr("Text Filter v1.6\n\n"
                                 " * Use fuzzy match to filter text (e.g. 'ore psu' will find 'Lorem Ipsum').\n"
                                 " * Press Enter in the Filter field to go to the next filter result.\n"
                                 " * Use Ctrl + Left Mouse Click on the line, to copy whole line to clipboard.\n"
                                 " * Press Alt + C several times to extend selection and copy multiple lines to clipboard.\n"
+                                "\n"
+                                "Icons are taken from sites:\n"
+                                "- http://www.iconarchive.com\n"
+                                "- http://www.iconsmind.com\n"
+                                "- http://icons8.com\n"
                                 "\n"
                                 "Written by Stepan Sypliak using Qt Creator."),
                              QMessageBox::Ok);
@@ -314,7 +319,6 @@ void MainWindow::on_toolButtonWordWrap_clicked()
 void MainWindow::on_pushButtonMenu_clicked(bool checked)
 {
     // Shortcuts does not work when control is not visible
-    //ui->widgetMenu->setVisible(!checked);
     ui->widgetMenu->setMinimumSize(0, checked ? 40 : 0);
     ui->widgetMenu->setMaximumSize(16777215, checked ? 40 : 0);
     ui->pushButtonMenu->setChecked(checked);
