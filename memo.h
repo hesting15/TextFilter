@@ -2,6 +2,7 @@
 #define MEMO_H
 
 #include <QString>
+#include <vector>
 
 struct FilteredLine
 {
