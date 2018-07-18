@@ -1,7 +1,8 @@
 [Desktop Entry]
 Type=Application
 Name=TextFilter
-Exec=AppRun %F
-Icon=Icon64
+Exec=TextFilter
+Icon=TextFilter
 Comment=Quickly filter text
 Terminal=false
+Categories=Utility;
