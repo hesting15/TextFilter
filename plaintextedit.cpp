@@ -46,13 +46,27 @@ void PlainTextEdit::wheelEvent(QWheelEvent *event)
 {
     if (QApplication::keyboardModifiers().testFlag(Qt::ControlModifier))
     {
+        int zoomLevel = 1;
+        if (font().pointSize() > 45)
+        {
+            zoomLevel = 8;
+        }
+        else if (font().pointSize() > 25)
+        {
+            zoomLevel = 4;
+        }
+        else if (font().pointSize() > 12)
+        {
+            zoomLevel = 2;
+        }
+
         if(event->delta() > 0)
         {
-            zoomIn(2);
+            zoomIn(zoomLevel);
         }
         else
         {
-            zoomOut(2);
+            zoomOut(zoomLevel);
         }
         Settings::getInstance().setFont(font());
         return;
