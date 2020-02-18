@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file>Icon64.png</file>
         <file>resources/128x128/copy.png</file>
         <file>resources/128x128/filter.png</file>
         <file>resources/128x128/help.png</file>
