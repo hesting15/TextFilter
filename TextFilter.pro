@@ -24,23 +24,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-    memo.cpp \
-    settings.cpp \
-    plaintextedit.cpp \
-    settingswindow.cpp
+    Document.cpp \
+    FileManager.cpp \
+    MainWindow.cpp \
+    PlainTextEdit.cpp \
+    Settings.cpp \
+    SettingsWindow.cpp \
+        main.cpp
 
 HEADERS += \
-        mainwindow.h \
-    memo.h \
-    settings.h \
-    plaintextedit.h \
-    settingswindow.h
+    Document.h \
+    FileManager.h \
+    MainWindow.h \
+    PlainTextEdit.h \
+    Settings.h \
+    SettingsWindow.h
 
 FORMS += \
-        mainwindow.ui \
-    settingswindow.ui
+    MainWindow.ui \
+    SettingsWindow.ui
 
 RC_ICONS += Icon64.ico
 

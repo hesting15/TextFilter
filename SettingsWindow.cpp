@@ -1,8 +1,8 @@
-#include "settingswindow.h"
+#include "SettingsWindow.h"
 #include "ui_settingswindow.h"
-#include "settings.h"
+#include "Settings.h"
 #include <QDebug>
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include <QFontDialog>
 
 SettingsWindow::SettingsWindow(QWidget *parent) :

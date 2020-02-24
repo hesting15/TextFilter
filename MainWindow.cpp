@@ -1,17 +1,20 @@
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <QMenu>
 #include <QFileDialog>
 #include <QMessageBox>
-#include "settingswindow.h"
-#include "settings.h"
+#include <QTextDocumentFragment>
+#include "SettingsWindow.h"
+#include "Settings.h"
+#include "Document.h"
 #include <QTimer>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    canMarkBufferAsModified(false)
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
+    , canMarkBufferAsModified(false)
+    , rootDocument(nullptr)
 {
     ui->setupUi(this);
 
@@ -19,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->frameInfo->setVisible(false);
     restoreGeometry(Settings::getInstance().getWindowGeometry());
     loadSettings();
-    loadTextFromFile();
+    loadLastFile();
     canMarkBufferAsModified = true;
 }
 
@@ -31,6 +34,7 @@ MainWindow::~MainWindow()
 void MainWindow::loadSettings()
 {
     ui->plainTextEdit->setFont(Settings::getInstance().getFont());
+    ui->plainTextEdit->updateTabWidth();
     setAlwaysOnTop();
     setWordWrap();
     setRecentFiles();
@@ -39,13 +43,19 @@ void MainWindow::loadSettings()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     Settings::getInstance().setWindowGeometry(saveGeometry());
-    if (ui->plainTextEdit->isOriginalTextChanged())
+    if (ui->plainTextEdit->isDirty())
     {
-        QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this, "Text Filter", "Save before quit?", QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
+        QMessageBox::StandardButton reply =
+            QMessageBox::question(
+                this,
+                "Text Filter",
+                "Save before quit?",
+                QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
+
         if (reply == QMessageBox::Yes)
         {
-            saveFile();
+            QString filename = Settings::getInstance().getFilename();
+            saveFile(filename);
         }
         else if (reply == QMessageBox::Cancel)
         {
@@ -54,35 +64,57 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
-void MainWindow::on_lineEditSearch_textChanged(const QString &filter)
+void MainWindow::undoToHistoryPoint(int historyPoint)
 {
-    canMarkBufferAsModified = filter.isEmpty();
 
-    // set cursor position to last filtered position
-    int currentLine = 0;
-    if (filter.isEmpty() && !ui->plainTextEdit->isInFilterMode())
+    while (ui->plainTextEdit->document()->availableUndoSteps() > historyPoint)
     {
-        currentLine = ui->plainTextEdit->getCurrentLineNumber(ui->plainTextEdit->textCursor());
-    }
-
-    const int filteredLinesCount = ui->plainTextEdit->applyFilter(filter);
-    ui->toolButtonPrevious->setEnabled(filteredLinesCount>0);
-    ui->toolButtonNext->setEnabled(filteredLinesCount>0);
-
-    if (currentLine)
-    {
-        ui->plainTextEdit->setCurrentLineNumber(currentLine);
+        ui->plainTextEdit->document()->undo();
     }
 }
 
-void MainWindow::loadTextFromFile()
+void MainWindow::on_lineEditSearch_textChanged(const QString &filter)
 {
-    ui->plainTextEdit->clearFilterAndLoadTextFromFile();
+    if (filter.isEmpty())
+    {
+        if (rootDocument != nullptr)
+        {
+            undoToHistoryPoint(rootDocument->getUndoHistoryPoint());
+            rootDocument.reset();
+        }
+    }
+    else
+    {
+        if (rootDocument == nullptr)
+        {
+            rootDocument.reset(new Document(ui->plainTextEdit->document()));
+        }
+
+        if (filter.length() >= Settings::getInstance().getFilterThreshold())
+        {
+            rootDocument->applyFilter(filter);
+            auto filteredDocument = rootDocument->getFilteredDocument();
+
+            ui->plainTextEdit->setTextFromOtherDocument(filteredDocument);
+        }
+    }
+
+    bool isTextFiltered = rootDocument && rootDocument->getFilteredLineCount() > 0;
+    ui->toolButtonPrevious->setEnabled(isTextFiltered);
+    ui->toolButtonNext->setEnabled(isTextFiltered);
+}
+
+void MainWindow::loadLastFile()
+{
+    QString filename = Settings::getInstance().getFilename();
+
+    ui->plainTextEdit->setPlainText(FileManager::load(filename));
+
     ui->lineEditSearch->clear();
     ui->toolButtonPrevious->setEnabled(false);
     ui->toolButtonNext->setEnabled(false);
-    QString filename = Settings::getInstance().getFilename();
     setWindowTitle(filename + (filename.isEmpty() ? "" : " - ") + "Text Filter");
+    updateSaveAndMenuButtonIcons();
 }
 
 void MainWindow::setAlwaysOnTop()
@@ -98,13 +130,18 @@ void MainWindow::setAlwaysOnTop()
     }
     this->setWindowFlags(flags);
     this->show();
-    ui->toolButtonAlwaysOnTop->setChecked(Settings::getInstance().isAlwaysOnTop());
+
+    ui->toolButtonAlwaysOnTop->setChecked(
+                Settings::getInstance().isAlwaysOnTop());
 }
 
 void MainWindow::setWordWrap()
 {
-    QPlainTextEdit::LineWrapMode mode = Settings::getInstance().isWordWrap() ? QPlainTextEdit::WidgetWidth
-                                                                             : QPlainTextEdit::NoWrap;
+    QPlainTextEdit::LineWrapMode mode =
+        Settings::getInstance().isWordWrap()
+            ? QPlainTextEdit::WidgetWidth
+            : QPlainTextEdit::NoWrap;
+
     ui->plainTextEdit->setLineWrapMode(mode);
     ui->toolButtonWordWrap->setChecked(Settings::getInstance().isWordWrap());
 }
@@ -116,13 +153,19 @@ void MainWindow::loadFile(const QString &filename)
         return;
     }
 
-    if (ui->plainTextEdit->isOriginalTextChanged())
+    if (ui->plainTextEdit->isDirty())
     {
-        QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this, "Text Filter", "Save changed file?", QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
+        QMessageBox::StandardButton reply =
+            QMessageBox::question(
+                this,
+                "Text Filter",
+                "Save changed file?",
+                QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
+
         if (reply == QMessageBox::Yes)
         {
-            saveFile();
+            QString oldFile = Settings::getInstance().getFilename();
+            saveFile(oldFile);
         }
         else if (reply == QMessageBox::Cancel)
         {
@@ -131,31 +174,36 @@ void MainWindow::loadFile(const QString &filename)
     }
 
     ui->lineEditSearch->clear();
-    ui->plainTextEdit->loadFile(filename);
+    ui->plainTextEdit->setPlainText(FileManager::load(filename));
     updateFilename(filename);
+    updateSaveAndMenuButtonIcons();
 }
 
-void MainWindow::saveFile()
+void MainWindow::saveFile(const QString& filename)
 {
-    if (ui->plainTextEdit->isFiltering())
-    {
-        on_lineEditSearch_textChanged("");
-    }
+    on_lineEditSearch_textChanged("");
 
-    const QString filename = Settings::getInstance().getFilename();
     if (filename.isEmpty())
     {
         on_toolButtonSaveFileAs_clicked();
         return;
     }
 
-    ui->plainTextEdit->saveFile(filename);
-    updateFilename(filename);
-
-    on_pushButtonMenu_clicked(false);
-    ui->frameInfo->setVisible(true);
-    QTimer::singleShot(2000, this, SLOT(hideFrameInfo()));
-
+    try
+    {
+        FileManager::save(filename, ui->plainTextEdit->toPlainText());
+        ui->plainTextEdit->setDirty(false);
+        ui->plainTextEdit->document()->setModified(false);
+        Settings::getInstance().setFilename(filename);
+        updateFilename(filename);
+        on_pushButtonMenu_clicked(false);
+        ui->frameInfo->setVisible(true);
+        QTimer::singleShot(2000, this, SLOT(hideFrameInfo()));
+    }
+    catch(const std::runtime_error& ex)
+    {
+        QMessageBox::information(this, tr("Unable to save file"), ex.what());
+    }
 }
 
 void MainWindow::updateFilename(const QString &filename)
@@ -164,7 +212,7 @@ void MainWindow::updateFilename(const QString &filename)
     Settings::getInstance().addRecentFile(filename);
     setRecentFiles();
     setWindowTitle(filename + " - Text Filter");
-    setSaveButtonIcon(false);
+    updateSaveAndMenuButtonIcons();
 }
 
 void MainWindow::hideFrameInfo()
@@ -179,37 +227,60 @@ void MainWindow::on_lineEditSearch_returnPressed()
 
 void MainWindow::on_toolButtonPrevious_clicked()
 {
-    ui->plainTextEdit->gotoPreviousFilteredLine();
+    if (rootDocument == nullptr)
+    {
+        return;
+    }
+
+    ui->plainTextEdit->setTextFromOtherDocument(
+         rootDocument->getFullDocumentWithPrevLineHighlighted());
+
+    ui->plainTextEdit->gotoLineNumber(
+        rootDocument->getCurrentHighligtedLineNum());
 }
 
 void MainWindow::on_toolButtonNext_clicked()
 {
-    ui->plainTextEdit->gotoNextFilteredLine();
+    if (rootDocument == nullptr)
+    {
+        return;
+    }
+
+    ui->plainTextEdit->setTextFromOtherDocument(
+        rootDocument->getFullDocumentWithNextLineHighlighted());
+
+    ui->plainTextEdit->gotoLineNumber(
+        rootDocument->getCurrentHighligtedLineNum());
 }
 
 void MainWindow::on_toolButtonOpenFile_clicked()
 {
-    QString filename = QFileDialog::getOpenFileName(this,
-                                                    tr("Open File"), "",
-                                                    tr("Text File (*.txt);;All Files (*)"));
+    QString filename =
+        QFileDialog::getOpenFileName(
+            this,
+            tr("Open File"), "",
+            tr("Text File (*.txt);;All Files (*)"));
+
     loadFile(filename);
 }
 
 void MainWindow::on_toolButtonSaveFile_clicked()
 {
-    saveFile();
+    QString filename = Settings::getInstance().getFilename();
+    saveFile(filename);
 }
 
 void MainWindow::on_toolButtonSaveFileAs_clicked()
 {
-    QString filename = QFileDialog::getSaveFileName(this,
-                                                    tr("Save File"), "",
-                                                    tr("Text File (*.txt);;All Files (*)"));
+    QString filename =
+        QFileDialog::getSaveFileName(
+            this,
+            tr("Save File"), "",
+            tr("Text File (*.txt);;All Files (*)"));
+
     if (!filename.isEmpty())
     {
-        Settings::getInstance().setFilename(filename);
-        saveFile();
-        setWindowTitle(filename + " - Text Filter");
+        saveFile(filename);
     }
 }
 
@@ -294,20 +365,23 @@ void MainWindow::on_toolButtonSettings_clicked()
 
 void MainWindow::on_toolButtonHelp_clicked()
 {
-    QMessageBox::information(this, tr("Text Filter"),
-                             tr("Text Filter v1.6\n\n"
-                                " * Use fuzzy match to filter text (e.g. 'ore psu' will find 'Lorem Ipsum').\n"
-                                " * Press Enter in the Filter field to go to the next filter result.\n"
-                                " * Use Ctrl + Left Mouse Click on the line, to copy whole line to clipboard.\n"
-                                " * Press Alt + C several times to extend selection and copy multiple lines to clipboard.\n"
-                                "\n"
-                                "Icons are taken from sites:\n"
-                                "- http://www.iconarchive.com\n"
-                                "- http://www.iconsmind.com\n"
-                                "- http://icons8.com\n"
-                                "\n"
-                                "Written by Stepan Sypliak using Qt Creator."),
-                             QMessageBox::Ok);
+    QMessageBox::information(
+        this,
+        tr("Text Filter"),
+        tr("Text Filter v1.6\n"
+           "\n"
+           " * Use fuzzy match to filter text (e.g. 'ore psu' will find 'Lorem Ipsum').\n"
+           " * Press Enter in the Filter field to go to the next filter result.\n"
+           " * Use Ctrl + Left Mouse Click on the line, to copy whole line to clipboard.\n"
+           " * Press Alt + C several times to extend selection and copy multiple lines to clipboard.\n"
+           "\n"
+           "Icons are taken from sites:\n"
+           "- http://www.iconarchive.com\n"
+           "- http://www.iconsmind.com\n"
+           "- http://icons8.com\n"
+           "\n"
+           "Written by Stepan Sypliak using Qt Creator."),
+        QMessageBox::Ok);
 }
 
 void MainWindow::on_toolButtonWordWrap_clicked()
@@ -326,7 +400,6 @@ void MainWindow::on_pushButtonMenu_clicked(bool checked)
 
 void MainWindow::on_toolButtonNewFile_clicked()
 {
-    ui->plainTextEdit->applyFilter("");
     ui->plainTextEdit->clear();
     ui->lineEditSearch->clear();
     Settings::getInstance().setFilename("");
@@ -335,11 +408,15 @@ void MainWindow::on_toolButtonNewFile_clicked()
 
 void MainWindow::on_plainTextEdit_textChanged()
 {
-    if (canMarkBufferAsModified)
+    if (rootDocument == nullptr)
     {
-        ui->plainTextEdit->updateIsOriginalTextChanged();
-        setSaveButtonIcon(ui->plainTextEdit->isOriginalTextChanged());
+        ui->plainTextEdit->setDirty(ui->plainTextEdit->document()->isModified());
     }
+    else
+    {
+        ui->plainTextEdit->setDirty(rootDocument->getDocument()->isModified());
+    }
+    updateSaveAndMenuButtonIcons();
 }
 
 void MainWindow::setRecentFiles()
@@ -365,19 +442,19 @@ void MainWindow::openRecent()
      loadFile(action->text());
 }
 
-void MainWindow::setSaveButtonIcon(bool changed)
+void MainWindow::updateSaveAndMenuButtonIcons()
 {
-    if (changed)
-    {
-        setIconMultipleResolutions(ui->pushButtonMenu,     "menu_changed.png");
-        setIconMultipleResolutions(ui->toolButtonSaveFile, "save_changed.png");
-    }
-    else
-    {
-        setIconMultipleResolutions(ui->pushButtonMenu,     "menu.png");
-        setIconMultipleResolutions(ui->toolButtonSaveFile, "save.png");
+    QString menuIcon = "menu.png";
+    QString saveIcon = "save.png";
 
+    if (ui->plainTextEdit->isDirty())
+    {
+        menuIcon = "menu_changed.png";
+        saveIcon = "save_changed.png";
     }
+
+    setIconMultipleResolutions(ui->pushButtonMenu,     menuIcon);
+    setIconMultipleResolutions(ui->toolButtonSaveFile, saveIcon);
 }
 
 void MainWindow::setIconMultipleResolutions(QAbstractButton *button, const QString& iconName)
@@ -385,3 +462,4 @@ void MainWindow::setIconMultipleResolutions(QAbstractButton *button, const QStri
     QIcon icon(":/resources/128x128/" + iconName);
     button->setIcon(icon);
 }
+

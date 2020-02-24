@@ -1,4 +1,4 @@
-#include "settings.h"
+#include "Settings.h"
 #include <QApplication>
 #include <QDebug>
 #include <QSettings>
@@ -17,7 +17,9 @@ const static QString cRecentFiles     = "RECENT_FILES";
 
 Settings::Settings()
 {
-    mIniPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.TextFilter.ini";
+    mIniPath =
+        QStandardPaths::writableLocation(
+            QStandardPaths::HomeLocation) + "/.TextFilter.ini";
 
     QSettings settings(mIniPath, QSettings::IniFormat);
     mFilename = settings.value(cFilename, "").toString();
