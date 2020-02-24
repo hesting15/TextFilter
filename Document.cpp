@@ -34,7 +34,7 @@ void Document::applyFilter(const QString& filter)
     QTextBlock block = mDoc->begin();
     while (block.isValid())
     {
-        MatchResult result = isLineMatchesFiter(block.text(), filter);
+        MatchResult result = filterLine(block.text(), filter);
         if (result.result)
         {
             mHighlightAreas[block.blockNumber()] = result.highlightAreas;
@@ -44,7 +44,7 @@ void Document::applyFilter(const QString& filter)
     }
 }
 
-Document::MatchResult Document::isLineMatchesFiter(
+Document::MatchResult Document::filterLine(
         const QString& line,
         const QString& filter)
 {

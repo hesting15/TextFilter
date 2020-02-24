@@ -181,7 +181,7 @@ void MainWindow::loadFile(const QString &filename)
 
 void MainWindow::saveFile(const QString& filename)
 {
-    on_lineEditSearch_textChanged("");
+    ui->lineEditSearch->clear();
 
     if (filename.isEmpty())
     {

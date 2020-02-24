@@ -67,7 +67,7 @@ private:
         std::vector<HighlightArea> highlightAreas;
     };
 
-    MatchResult isLineMatchesFiter(const QString& line, const QString& filter);
+    MatchResult filterLine(const QString& line, const QString& filter);
 
 
     void highlightMatchedText(
