@@ -68,7 +68,7 @@ void PlainTextEdit::wheelEvent(QWheelEvent *event)
             zoomLevel = 2;
         }
 
-        if(event->delta() > 0)
+        if(event->angleDelta().y() > 0)
         {
             zoomIn(zoomLevel);
         }

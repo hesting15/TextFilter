@@ -37,7 +37,7 @@ public:
 
 private:
 
-    // Area to highliht in the line
+    // Area to highlight in the line
     // Begin and end represents values since line start
     struct HighlightArea
     {

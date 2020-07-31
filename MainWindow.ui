@@ -894,9 +894,6 @@
         <property name="lineWrapMode">
          <enum>QPlainTextEdit::NoWrap</enum>
         </property>
-        <property name="tabStopWidth">
-         <number>0</number>
-        </property>
         <property name="tabStopDistance">
          <double>0.000000000000000</double>
         </property>
@@ -923,7 +920,7 @@
   <customwidget>
    <class>PlainTextEdit</class>
    <extends>QPlainTextEdit</extends>
-   <header>plaintextedit.h</header>
+   <header>PlainTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -45,7 +45,7 @@ private slots:
     void on_plainTextEdit_textChanged();
 
 private:
-    void loadSettings();
+    void applySettings();
     void createMenuActions();
     void saveFile(const QString& filename);
     void loadFile(const QString& fileName);
@@ -57,7 +57,6 @@ private:
     void setRecentFiles();
     void updateSaveAndMenuButtonIcons();
     void updateFilename(const QString& filename);
-    bool canMarkBufferAsModified;
     void setIconMultipleResolutions(
         QAbstractButton *button,
         const QString &iconName);

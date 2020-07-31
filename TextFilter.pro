@@ -30,7 +30,7 @@ SOURCES += \
     PlainTextEdit.cpp \
     Settings.cpp \
     SettingsWindow.cpp \
-        main.cpp
+    main.cpp
 
 HEADERS += \
     Document.h \

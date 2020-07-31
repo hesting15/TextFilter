@@ -1,5 +1,5 @@
 #include "MainWindow.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 #include <QDebug>
 #include <QMenu>
 #include <QFileDialog>
@@ -13,17 +13,20 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , canMarkBufferAsModified(false)
     , rootDocument(nullptr)
 {
     ui->setupUi(this);
 
+    // Hide menu panel
     on_pushButtonMenu_clicked(false);
+
     ui->frameInfo->setVisible(false);
+
+    // Set position
     restoreGeometry(Settings::getInstance().getWindowGeometry());
-    loadSettings();
+
+    applySettings();
     loadLastFile();
-    canMarkBufferAsModified = true;
 }
 
 MainWindow::~MainWindow()
@@ -31,7 +34,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::loadSettings()
+void MainWindow::applySettings()
 {
     ui->plainTextEdit->setFont(Settings::getInstance().getFont());
     ui->plainTextEdit->updateTabWidth();
@@ -347,7 +350,7 @@ void MainWindow::on_toolButtonSettings_clicked()
     settingsWindow->setModal(true);
 
     connect(settingsWindow, &SettingsWindow::applySettings,
-            this, &MainWindow::loadSettings);
+            this, &MainWindow::applySettings);
 
     Qt::WindowFlags flags = settingsWindow->windowFlags();
     flags = flags & ~Qt::WindowContextHelpButtonHint; // Hide help ? button

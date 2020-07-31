@@ -1,5 +1,5 @@
 #include "SettingsWindow.h"
-#include "ui_settingswindow.h"
+#include "ui_SettingsWindow.h"
 #include "Settings.h"
 #include <QDebug>
 #include "MainWindow.h"
