@@ -3,6 +3,7 @@
 
 #include <QPlainTextEdit>
 #include <FileManager.h>
+#include <memory>
 
 class PlainTextEdit : public QPlainTextEdit
 {
