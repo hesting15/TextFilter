@@ -1,0 +1,11 @@
+Package: text-filter
+Version: 1.7
+Source: text-filter
+Section: editors
+Priority: optional
+Maintainer: stepan <hesting15@gmail.com>
+Build-Depends: debhelper (>= 9), qtbase5-dev, qtbase5-dev-tools, qt5-qmake
+Depends: libqt5gui5, libqt5widgets5, libqt5core5a
+Homepage: https://github.com/hesting15/TextFilter
+Architecture: amd64
+Description: > Quickly filter text with fuzzy search

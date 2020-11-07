@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Text Filter
+Comment=Quickly filter text using fuzzy search
+Exec=/usr/local/bin/text-filter
+Path=/usr/local/bin/
+Icon=/usr/share/pixmaps/text-filter-logo.png
+Terminal=false
+Type=Application
+Categories=Utility

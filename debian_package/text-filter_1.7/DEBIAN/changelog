@@ -1,0 +1,5 @@
+text-filter (1.7-1) unstable; urgency=medium
+
+  * Run text filtering in background thread to unblock UI
+
+ -- stepan <hesting15@gmail.com>  Fri, 31 Jul 2020 19:04:13 +0300
