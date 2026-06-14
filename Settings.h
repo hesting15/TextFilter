@@ -4,6 +4,7 @@
 #include <QString>
 #include <QRect>
 #include <QFont>
+#include <QList>
 
 class Settings
 {

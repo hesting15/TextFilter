@@ -121,6 +121,7 @@ std::shared_ptr<QTextDocument> Document::getFilteredDocument()
             else
             {
                 removeLine(block);
+                break;
             }
         }
         else

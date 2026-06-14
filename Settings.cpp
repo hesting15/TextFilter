@@ -2,7 +2,8 @@
 #include <QApplication>
 #include <QDebug>
 #include <QSettings>
-#include <QDesktopWidget>
+#include <QGuiApplication>
+#include <QScreen>
 #include <QStandardPaths>
 
 const static QString cFilename        = "FILE_NAME";
