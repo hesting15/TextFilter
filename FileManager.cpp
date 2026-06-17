@@ -12,9 +12,16 @@ QString FileManager::load(const QString &filename)
     }
 
     QFile file(filename);
-    file.open(QFile::ReadWrite | QFile::Text);
+    if (!file.open(QIODevice::ReadOnly | QFile::Text))
+    {
+        qWarning() << "FileManager::load: failed to open" << filename << file.errorString();
+        return QString();
+    }
+
     QTextStream readFile(&file);
-    return readFile.readAll();
+    QString content = readFile.readAll();
+    file.close();
+    return content;
 }
 
 void FileManager::save(const QString &filename, const QString &text)

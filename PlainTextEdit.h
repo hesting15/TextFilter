@@ -2,7 +2,6 @@
 #define PLAINTEXTEDIT_H
 
 #include <QPlainTextEdit>
-#include <FileManager.h>
 #include <memory>
 
 class PlainTextEdit : public QPlainTextEdit
@@ -19,7 +18,6 @@ public:
     // LineNumberArea
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
-    int getCurrentLineNumber(QTextCursor cursor);
 
     void gotoLineNumber(const int lineNumber);
 

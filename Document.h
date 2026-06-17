@@ -27,7 +27,7 @@ public:
 
     QString getFilter() const { return mFilter; }
 
-    int getCurrentHighligtedLineNum() const { return mCurrentHighlightedLine; }
+    int getCurrentHighlightedLineNum() const { return mCurrentHighlightedLine; }
     int getFilteredLineCount() const { return mHighlightAreas.size(); }
 
     // Workaround. Cloning QTextDocument does not clone undo history

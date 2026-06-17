@@ -2,7 +2,6 @@
 #include "ui_SettingsWindow.h"
 #include "Settings.h"
 #include <QDebug>
-#include "MainWindow.h"
 #include <QFontDialog>
 
 SettingsWindow::SettingsWindow(QWidget *parent) :

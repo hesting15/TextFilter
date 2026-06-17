@@ -34,7 +34,7 @@
    </property>
    <layout class="QGridLayout" name="gridLayout">
     <property name="sizeConstraint">
-     <enum>QLayout::SetDefaultConstraint</enum>
+     <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
     </property>
     <property name="leftMargin">
      <number>0</number>
@@ -301,16 +301,16 @@
             <bool>false</bool>
            </property>
            <property name="popupMode">
-            <enum>QToolButton::MenuButtonPopup</enum>
+            <enum>QToolButton::ToolButtonPopupMode::MenuButtonPopup</enum>
            </property>
            <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonIconOnly</enum>
+            <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
            </property>
            <property name="arrowType">
-            <enum>Qt::NoArrow</enum>
+            <enum>Qt::ArrowType::NoArrow</enum>
            </property>
           </widget>
          </item>
@@ -357,13 +357,13 @@
             <bool>false</bool>
            </property>
            <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonIconOnly</enum>
+            <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
            </property>
            <property name="arrowType">
-            <enum>Qt::NoArrow</enum>
+            <enum>Qt::ArrowType::NoArrow</enum>
            </property>
           </widget>
          </item>
@@ -407,20 +407,20 @@
             <bool>false</bool>
            </property>
            <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonIconOnly</enum>
+            <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
            </property>
            <property name="arrowType">
-            <enum>Qt::NoArrow</enum>
+            <enum>Qt::ArrowType::NoArrow</enum>
            </property>
           </widget>
          </item>
          <item>
           <spacer name="horizontalSpacer">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -473,13 +473,13 @@
             <bool>false</bool>
            </property>
            <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonIconOnly</enum>
+            <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
            </property>
            <property name="arrowType">
-            <enum>Qt::NoArrow</enum>
+            <enum>Qt::ArrowType::NoArrow</enum>
            </property>
           </widget>
          </item>
@@ -523,13 +523,13 @@
             <bool>false</bool>
            </property>
            <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonIconOnly</enum>
+            <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
            </property>
            <property name="arrowType">
-            <enum>Qt::NoArrow</enum>
+            <enum>Qt::ArrowType::NoArrow</enum>
            </property>
           </widget>
          </item>
@@ -576,20 +576,20 @@
             <bool>false</bool>
            </property>
            <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonIconOnly</enum>
+            <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
            </property>
            <property name="arrowType">
-            <enum>Qt::NoArrow</enum>
+            <enum>Qt::ArrowType::NoArrow</enum>
            </property>
           </widget>
          </item>
          <item>
           <spacer name="horizontalSpacer_2">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -639,13 +639,13 @@
             <bool>true</bool>
            </property>
            <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonIconOnly</enum>
+            <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
            </property>
            <property name="arrowType">
-            <enum>Qt::NoArrow</enum>
+            <enum>Qt::ArrowType::NoArrow</enum>
            </property>
           </widget>
          </item>
@@ -689,20 +689,20 @@
             <bool>true</bool>
            </property>
            <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonIconOnly</enum>
+            <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
            </property>
            <property name="arrowType">
-            <enum>Qt::NoArrow</enum>
+            <enum>Qt::ArrowType::NoArrow</enum>
            </property>
           </widget>
          </item>
          <item>
           <spacer name="horizontalSpacer_3">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -752,13 +752,13 @@
             <bool>false</bool>
            </property>
            <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonIconOnly</enum>
+            <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
            </property>
            <property name="arrowType">
-            <enum>Qt::NoArrow</enum>
+            <enum>Qt::ArrowType::NoArrow</enum>
            </property>
           </widget>
          </item>
@@ -805,13 +805,13 @@
             <bool>false</bool>
            </property>
            <property name="toolButtonStyle">
-            <enum>Qt::ToolButtonIconOnly</enum>
+            <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
            </property>
            <property name="arrowType">
-            <enum>Qt::NoArrow</enum>
+            <enum>Qt::ArrowType::NoArrow</enum>
            </property>
           </widget>
          </item>
@@ -833,10 +833,10 @@
          </size>
         </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::Shape::StyledPanel</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+         <enum>QFrame::Shadow::Raised</enum>
         </property>
         <widget class="QLabel" name="label">
          <property name="geometry">
@@ -880,19 +880,19 @@
          </font>
         </property>
         <property name="contextMenuPolicy">
-         <enum>Qt::DefaultContextMenu</enum>
+         <enum>Qt::ContextMenuPolicy::DefaultContextMenu</enum>
         </property>
         <property name="autoFillBackground">
          <bool>true</bool>
         </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::Shape::StyledPanel</enum>
         </property>
         <property name="lineWidth">
          <number>1</number>
         </property>
         <property name="lineWrapMode">
-         <enum>QPlainTextEdit::NoWrap</enum>
+         <enum>QPlainTextEdit::LineWrapMode::NoWrap</enum>
         </property>
         <property name="tabStopDistance">
          <double>0.000000000000000</double>

@@ -9,6 +9,7 @@
 #include "Settings.h"
 #include "Document.h"
 #include <QTimer>
+#include "FileManager.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -27,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     applySettings();
     loadLastFile();
+
+    ui->lineEditSearch->installEventFilter(this);
 }
 
 MainWindow::~MainWindow()
@@ -223,11 +226,6 @@ void MainWindow::hideFrameInfo()
     ui->frameInfo->setVisible(false);
 }
 
-void MainWindow::on_lineEditSearch_returnPressed()
-{
-    on_toolButtonNext_clicked();
-}
-
 void MainWindow::on_toolButtonPrevious_clicked()
 {
     if (rootDocument == nullptr)
@@ -239,7 +237,7 @@ void MainWindow::on_toolButtonPrevious_clicked()
          rootDocument->getFullDocumentWithPrevLineHighlighted());
 
     ui->plainTextEdit->gotoLineNumber(
-        rootDocument->getCurrentHighligtedLineNum());
+        rootDocument->getCurrentHighlightedLineNum());
 }
 
 void MainWindow::on_toolButtonNext_clicked()
@@ -253,7 +251,7 @@ void MainWindow::on_toolButtonNext_clicked()
         rootDocument->getFullDocumentWithNextLineHighlighted());
 
     ui->plainTextEdit->gotoLineNumber(
-        rootDocument->getCurrentHighligtedLineNum());
+        rootDocument->getCurrentHighlightedLineNum());
 }
 
 void MainWindow::on_toolButtonOpenFile_clicked()
@@ -430,7 +428,7 @@ void MainWindow::setRecentFiles()
         delete action;
     }
 
-    QStringList recentFiles = Settings::getInstance().getRecentFiles();
+    const QStringList recentFiles = Settings::getInstance().getRecentFiles();
     for (const QString& filename : recentFiles)
     {
         QAction* recentFile = new QAction(filename, this);
@@ -466,3 +464,29 @@ void MainWindow::setIconMultipleResolutions(QAbstractButton *button, const QStri
     button->setIcon(icon);
 }
 
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == ui->lineEditSearch && event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        if (keyEvent->key() == Qt::Key_Escape)
+        {
+            on_toolButtonFilterText_clicked();
+            return true; // Mark event as handled (intercepted)
+        }
+        else if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)
+        {
+            if (keyEvent->modifiers() & Qt::ShiftModifier)
+            {
+                on_toolButtonPrevious_clicked();
+            }
+            else
+            {
+                on_toolButtonNext_clicked();
+            }
+            return true;
+        }
+    }
+    // Pass unhandled events to the parent class hierarchy
+    return QMainWindow::eventFilter(obj, event);
+}

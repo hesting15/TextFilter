@@ -21,9 +21,9 @@ public:
 public slots:
 protected:
     void closeEvent(QCloseEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event);
 private slots:
     void on_lineEditSearch_textChanged(const QString &text);
-    void on_lineEditSearch_returnPressed();
     void on_toolButtonPrevious_clicked();
     void on_toolButtonNext_clicked();
     void on_toolButtonOpenFile_clicked();
