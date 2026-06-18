@@ -369,7 +369,7 @@ void MainWindow::on_toolButtonHelp_clicked()
     QMessageBox::information(
         this,
         tr("Text Filter"),
-        tr("Text Filter v1.6\n"
+        tr("Text Filter v1.7\n"
            "\n"
            " * Use fuzzy match to filter text (e.g. 'ore psu' will find 'Lorem Ipsum').\n"
            " * Press Enter in the Filter field to go to the next filter result.\n"
