@@ -202,6 +202,7 @@ void PlainTextEdit::setTextFromOtherDocument(
     }
 }
 
+
 void PlainTextEdit::updateTabWidth()
 {
     setTabStopDistance(QFontMetricsF(font()).horizontalAdvance(' ') * 4);

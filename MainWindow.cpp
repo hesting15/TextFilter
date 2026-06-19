@@ -1,4 +1,5 @@
 #include "MainWindow.h"
+#include "qtextobject.h"
 #include "ui_MainWindow.h"
 #include <QDebug>
 #include <QMenu>

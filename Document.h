@@ -35,6 +35,11 @@ public:
     // and keep track at which undo history point text was inserted
     int getUndoHistoryPoint() { return mUndoHistoryPoint; }
 
+    // Document.h (add inside class Document public section)
+    static void copyCharacterFormatting(
+        const QTextDocument* src,
+        QTextDocument* dst);
+
 private:
 
     // Area to highlight in the line
