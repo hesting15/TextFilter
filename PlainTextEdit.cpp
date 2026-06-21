@@ -10,22 +10,22 @@
 #include <QTextDocumentFragment>
 
 PlainTextEdit::PlainTextEdit(QWidget *parent)
-  : QPlainTextEdit(parent)
-  , mIsDirty(false)
+    : QPlainTextEdit(parent)
+    , mIsDirty(false)
 {
     lineNumberArea = new LineNumberArea(this);
 
     connect(
-       this,
-       SIGNAL(blockCountChanged(int)),
-       this,
-       SLOT(updateLineNumberAreaWidth(int)));
+        this,
+        SIGNAL(blockCountChanged(int)),
+        this,
+        SLOT(updateLineNumberAreaWidth(int)));
 
     connect(
-       this,
-       SIGNAL(updateRequest(QRect,int)),
-       this,
-       SLOT(updateLineNumberArea(QRect,int)));
+        this,
+        SIGNAL(updateRequest(QRect,int)),
+        this,
+        SLOT(updateLineNumberArea(QRect,int)));
 
     updateLineNumberAreaWidth(0);
 }
@@ -33,7 +33,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent)
 void PlainTextEdit::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton
-       && QApplication::keyboardModifiers().testFlag(Qt::ControlModifier))
+        && QApplication::keyboardModifiers().testFlag(Qt::ControlModifier))
     {
         int line =
             event->pos().y() / fontMetrics().height()
@@ -91,13 +91,7 @@ void PlainTextEdit::setPlainText(const QString &text)
     mIsDirty = false;
 }
 
-void PlainTextEdit::gotoLineNumber(const int lineNumber)
-{
-    // Show current line in the middle of the text edit
-    int numberOfVisibleLines = height() / fontMetrics().height();
-    verticalScrollBar()->setValue(lineNumber - numberOfVisibleLines/2);
-    ensureCursorVisible();
-}
+
 
 int PlainTextEdit::lineNumberAreaWidth()
 {
@@ -159,7 +153,7 @@ void PlainTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 
     int top =
         (int)blockBoundingGeometry(block)
-        .translated(contentOffset()).top();
+            .translated(contentOffset()).top();
 
     int bottom = top + (int) blockBoundingRect(block).height();
 

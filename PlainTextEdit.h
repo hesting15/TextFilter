@@ -19,8 +19,6 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
 
-    void gotoLineNumber(const int lineNumber);
-
     bool isDirty() const { return mIsDirty; }
     void setDirty(bool isDirty) { mIsDirty = isDirty; }
 

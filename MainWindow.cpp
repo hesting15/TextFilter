@@ -244,8 +244,14 @@ void MainWindow::on_toolButtonPrevious_clicked()
     ui->plainTextEdit->setTextFromOtherDocument(
         rootDocument->getFullDocumentWithPrevLineHighlighted());
 
-    ui->plainTextEdit->gotoLineNumber(
-        rootDocument->getCurrentHighlightedLineNum());
+    int lineNum = rootDocument->getCurrentHighlightedLineNum();
+    QTextBlock block = ui->plainTextEdit->document()->findBlockByNumber(lineNum);
+    if (block.isValid())
+    {
+        QTextCursor cursor(block);
+        ui->plainTextEdit->setTextCursor(cursor);
+        ui->plainTextEdit->centerCursor();
+    }
 }
 
 void MainWindow::on_toolButtonNext_clicked()
@@ -258,8 +264,14 @@ void MainWindow::on_toolButtonNext_clicked()
     ui->plainTextEdit->setTextFromOtherDocument(
         rootDocument->getFullDocumentWithNextLineHighlighted());
 
-    ui->plainTextEdit->gotoLineNumber(
-        rootDocument->getCurrentHighlightedLineNum());
+    int lineNum = rootDocument->getCurrentHighlightedLineNum();
+    QTextBlock block = ui->plainTextEdit->document()->findBlockByNumber(lineNum);
+    if (block.isValid())
+    {
+        QTextCursor cursor(block);
+        ui->plainTextEdit->setTextCursor(cursor);
+        ui->plainTextEdit->centerCursor();
+    }
 }
 
 void MainWindow::on_toolButtonOpenFile_clicked()
