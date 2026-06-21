@@ -96,6 +96,7 @@ void PlainTextEdit::gotoLineNumber(const int lineNumber)
     // Show current line in the middle of the text edit
     int numberOfVisibleLines = height() / fontMetrics().height();
     verticalScrollBar()->setValue(lineNumber - numberOfVisibleLines/2);
+    ensureCursorVisible();
 }
 
 int PlainTextEdit::lineNumberAreaWidth()

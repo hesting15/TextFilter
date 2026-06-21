@@ -352,13 +352,13 @@ void MainWindow::on_toolButtonAlwaysOnTop_clicked()
 
 void MainWindow::on_toolButtonSettings_clicked()
 {
-    SettingsWindow *settingsWindow = new SettingsWindow();
-    settingsWindow->setModal(true);
+    SettingsWindow settingsWindow;
+    settingsWindow.setModal(true);
 
-    connect(settingsWindow, &SettingsWindow::applySettings,
+    connect(&settingsWindow, &SettingsWindow::applySettings,
             this, &MainWindow::applySettings);
 
-    Qt::WindowFlags flags = settingsWindow->windowFlags();
+    Qt::WindowFlags flags = settingsWindow.windowFlags();
     flags = flags & ~Qt::WindowContextHelpButtonHint; // Hide help ? button
     if (Settings::getInstance().isAlwaysOnTop())
     {
@@ -368,8 +368,8 @@ void MainWindow::on_toolButtonSettings_clicked()
     {
         flags = flags & ~Qt::WindowStaysOnTopHint;
     }
-    settingsWindow->setWindowFlags(flags);
-    settingsWindow->exec();
+    settingsWindow.setWindowFlags(flags);
+    settingsWindow.exec();
 }
 
 void MainWindow::on_toolButtonHelp_clicked()

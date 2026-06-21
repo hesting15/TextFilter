@@ -49,7 +49,7 @@ Document::MatchResult Document::filterLine(
     const QString& filter)
 {
     MatchResult result;
-    QStringList filterItems = filter.split(" ");
+    QStringList filterItems = filter.split(" ", Qt::SkipEmptyParts);
 
     int fromIndex = 0;
 
@@ -98,7 +98,8 @@ void Document::removeLine(const QTextBlock& block)
 {
     QTextCursor cursor(block);
     cursor.select(QTextCursor::LineUnderCursor);
-    cursor.movePosition(QTextCursor::NextCharacter,QTextCursor::KeepAnchor);
+    if (block.next().isValid())
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
     cursor.removeSelectedText();
 }
 
