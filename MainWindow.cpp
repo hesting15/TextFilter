@@ -1,4 +1,5 @@
 #include "MainWindow.h"
+#include "qscrollbar.h"
 #include "qtextobject.h"
 #include "ui_MainWindow.h"
 #include <QDebug>
@@ -86,8 +87,14 @@ void MainWindow::on_lineEditSearch_textChanged(const QString &filter)
     {
         if (rootDocument != nullptr)
         {
+            int savedScrollValue = ui->plainTextEdit->verticalScrollBar()->value();
+            QTextCursor savedCursor = ui->plainTextEdit->textCursor();
+
             undoToHistoryPoint(rootDocument->getUndoHistoryPoint());
             rootDocument.reset();
+
+            ui->plainTextEdit->setTextCursor(savedCursor);
+            ui->plainTextEdit->verticalScrollBar()->setValue(savedScrollValue);
         }
     }
     else
@@ -139,7 +146,7 @@ void MainWindow::setAlwaysOnTop()
     this->show();
 
     ui->toolButtonAlwaysOnTop->setChecked(
-                Settings::getInstance().isAlwaysOnTop());
+        Settings::getInstance().isAlwaysOnTop());
 }
 
 void MainWindow::setWordWrap()
@@ -235,7 +242,7 @@ void MainWindow::on_toolButtonPrevious_clicked()
     }
 
     ui->plainTextEdit->setTextFromOtherDocument(
-         rootDocument->getFullDocumentWithPrevLineHighlighted());
+        rootDocument->getFullDocumentWithPrevLineHighlighted());
 
     ui->plainTextEdit->gotoLineNumber(
         rootDocument->getCurrentHighlightedLineNum());
@@ -440,8 +447,8 @@ void MainWindow::setRecentFiles()
 
 void MainWindow::openRecent()
 {
-     QAction* action = qobject_cast<QAction *>(sender());
-     loadFile(action->text());
+    QAction* action = qobject_cast<QAction *>(sender());
+    loadFile(action->text());
 }
 
 void MainWindow::updateSaveAndMenuButtonIcons()
