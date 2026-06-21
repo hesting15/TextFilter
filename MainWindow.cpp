@@ -95,6 +95,7 @@ void MainWindow::on_lineEditSearch_textChanged(const QString &filter)
 
             ui->plainTextEdit->setTextCursor(savedCursor);
             ui->plainTextEdit->verticalScrollBar()->setValue(savedScrollValue);
+            ui->plainTextEdit->horizontalScrollBar()->setValue(0);
         }
     }
     else
