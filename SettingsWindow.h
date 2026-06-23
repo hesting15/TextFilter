@@ -29,6 +29,9 @@ private:
     Ui::SettingsWindow *ui;
     void setFontTitle();
     QFont mFont;
+
+    static QFont::StyleStrategy indexToStyleStrategy(int index);
+    static int styleStrategyToIndex(QFont::StyleStrategy strategy);
 };
 
 #endif // SETTINGSWINDOW_H

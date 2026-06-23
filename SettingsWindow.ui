@@ -10,19 +10,19 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>350</height>
+    <height>400</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>400</width>
-    <height>350</height>
+    <height>400</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>400</width>
-    <height>350</height>
+    <height>400</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -34,7 +34,7 @@
      <x>10</x>
      <y>10</y>
      <width>381</width>
-     <height>101</height>
+     <height>151</height>
     </rect>
    </property>
    <property name="font">
@@ -83,12 +83,60 @@
      <string>Font Name</string>
     </property>
    </widget>
+   <widget class="QLabel" name="labelStyleStrategy">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>100</y>
+      <width>111</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Rendering style</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBoxStyleStrategy">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>100</y>
+      <width>221</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Default</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Prefer Antialias</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>No Antialias</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>No Subpixel Antialias</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Prefer Quality</string>
+     </property>
+    </item>
+   </widget>
   </widget>
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>120</y>
+     <y>170</y>
      <width>381</width>
      <height>71</height>
     </rect>
@@ -163,7 +211,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>200</y>
+     <y>250</y>
      <width>381</width>
      <height>91</height>
     </rect>
@@ -207,7 +255,7 @@
    <property name="geometry">
     <rect>
      <x>300</x>
-     <y>310</y>
+     <y>360</y>
      <width>82</width>
      <height>30</height>
     </rect>
@@ -225,7 +273,7 @@
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>310</y>
+     <y>360</y>
      <width>82</width>
      <height>30</height>
     </rect>

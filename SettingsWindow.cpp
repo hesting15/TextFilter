@@ -14,6 +14,8 @@ SettingsWindow::SettingsWindow(QWidget *parent) :
     ui->checkBoxAlwaysOnTop->setChecked(Settings::getInstance().isAlwaysOnTop());
     ui->spinBoxStartFilter->setValue(Settings::getInstance().getFilterThreshold());
     ui->checkBoxWordWrap->setChecked(Settings::getInstance().isWordWrap());
+    ui->comboBoxStyleStrategy->setCurrentIndex(
+        styleStrategyToIndex(Settings::getInstance().getStyleStrategy()));
 }
 
 SettingsWindow::~SettingsWindow()
@@ -37,8 +39,34 @@ void SettingsWindow::on_pushButtonOk_clicked()
     Settings::getInstance().setFilterThreshold(ui->spinBoxStartFilter->value());
     Settings::getInstance().setAlwaysOnTop(ui->checkBoxAlwaysOnTop->isChecked());
     Settings::getInstance().setWordWrap(ui->checkBoxWordWrap->isChecked());
+    Settings::getInstance().setStyleStrategy(
+        indexToStyleStrategy(ui->comboBoxStyleStrategy->currentIndex()));
     emit applySettings();
     close();
+}
+
+QFont::StyleStrategy SettingsWindow::indexToStyleStrategy(int index)
+{
+    switch (index)
+    {
+    case 1:  return QFont::PreferAntialias;
+    case 2:  return QFont::NoAntialias;
+    case 3:  return QFont::NoSubpixelAntialias;
+    case 4:  return QFont::PreferQuality;
+    default: return QFont::PreferDefault;
+    }
+}
+
+int SettingsWindow::styleStrategyToIndex(QFont::StyleStrategy strategy)
+{
+    switch (strategy)
+    {
+    case QFont::PreferAntialias:      return 1;
+    case QFont::NoAntialias:          return 2;
+    case QFont::NoSubpixelAntialias:  return 3;
+    case QFont::PreferQuality:        return 4;
+    default:                          return 0;
+    }
 }
 
 void SettingsWindow::on_pushButtonCancel_clicked()

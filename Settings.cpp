@@ -15,6 +15,7 @@ const static QString cAlwaysOnTop     = "ALWAYS_ON_TOP";
 const static QString cFilterThreshold = "FILTER_THRESHOLD";
 const static QString cWordWrap        = "WORD_WRAP";
 const static QString cRecentFiles     = "RECENT_FILES";
+const static QString cStyleStrategy   = "STYLE_STRATEGY";
 
 Settings::Settings()
 {
@@ -29,12 +30,16 @@ Settings::Settings()
     mFilterThreshold = settings.value(cFilterThreshold, 1).toInt();
     mWordWrap = settings.value(cWordWrap, false).toBool();
 
+    mStyleStrategy = static_cast<QFont::StyleStrategy>(
+        settings.value(cStyleStrategy, QFont::PreferDefault).toInt());
+
     const QString fontName = settings.value(cFontName, "Courier New").toString();
     const int fontSize     = settings.value(cFontSize, 11).toInt();
     const bool fontBold    = settings.value(cFontBold, false).toBool();
 
     mFont = QFont(fontName, fontSize);
     mFont.setBold(fontBold);
+    mFont.setStyleStrategy(mStyleStrategy);
 
     mRecentFiles = settings.value(cRecentFiles).toStringList();
 }
@@ -50,6 +55,7 @@ void Settings::saveSettings()
     settings.setValue(cAlwaysOnTop, mAlwaysOnTop);
     settings.setValue(cFilterThreshold, mFilterThreshold);
     settings.setValue(cWordWrap, mWordWrap);
+    settings.setValue(cStyleStrategy, static_cast<int>(mStyleStrategy));
     settings.setValue(cRecentFiles, mRecentFiles);
 }
 
@@ -86,6 +92,13 @@ void Settings::setFilterThreshold(const int filterThreshold)
 void Settings::setWordWrap(const bool wordWrap)
 {
     mWordWrap = wordWrap;
+    saveSettings();
+}
+
+void Settings::setStyleStrategy(QFont::StyleStrategy strategy)
+{
+    mStyleStrategy = strategy;
+    mFont.setStyleStrategy(strategy);
     saveSettings();
 }
 

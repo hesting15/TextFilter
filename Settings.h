@@ -20,13 +20,14 @@ public:
     Settings& operator=(Settings const&) = delete;
     Settings& operator=(Settings &&) = delete;
 
-    QString getFilename()          { return mFilename;        }
-    QFont getFont()                { return mFont;            }
-    QByteArray getWindowGeometry() { return mGeometry;        }
-    bool isAlwaysOnTop()           { return mAlwaysOnTop;     }
-    int getFilterThreshold()       { return mFilterThreshold; }
-    bool isWordWrap()              { return mWordWrap;        }
-    QStringList getRecentFiles()   { return mRecentFiles;     }
+    QString getFilename()                   { return mFilename;        }
+    QFont getFont()                         { return mFont;            }
+    QByteArray getWindowGeometry()          { return mGeometry;        }
+    bool isAlwaysOnTop()                    { return mAlwaysOnTop;     }
+    int getFilterThreshold()                { return mFilterThreshold; }
+    bool isWordWrap()                       { return mWordWrap;        }
+    QStringList getRecentFiles()            { return mRecentFiles;     }
+    QFont::StyleStrategy getStyleStrategy() { return mStyleStrategy;   }
 
     void setFilename(const QString &filename);
     void setFont(const QFont &font);
@@ -34,6 +35,7 @@ public:
     void setAlwaysOnTop(const bool alwaysOnTop);
     void setFilterThreshold(const int filterThreshold);
     void setWordWrap(const bool wordWrap);
+    void setStyleStrategy(QFont::StyleStrategy strategy);
     void addRecentFile(const QString &filename);
 
 private:
@@ -41,14 +43,15 @@ private:
 
     void saveSettings();
 
-    QString     mIniPath;
-    QString     mFilename;
-    QFont       mFont;
-    QByteArray  mGeometry;
-    bool        mAlwaysOnTop;
-    int         mFilterThreshold;
-    bool        mWordWrap;
-    QStringList mRecentFiles;
+    QString              mIniPath;
+    QString              mFilename;
+    QFont                mFont;
+    QByteArray           mGeometry;
+    bool                 mAlwaysOnTop;
+    int                  mFilterThreshold;
+    bool                 mWordWrap;
+    QFont::StyleStrategy mStyleStrategy;
+    QStringList          mRecentFiles;
 };
 
 #endif // SETTINGS_H
