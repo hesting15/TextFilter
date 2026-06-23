@@ -32,6 +32,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent)
 
 void PlainTextEdit::mousePressEvent(QMouseEvent *event)
 {
+
     if (event->button() == Qt::LeftButton
         && QApplication::keyboardModifiers().testFlag(Qt::ControlModifier))
     {
@@ -52,6 +53,7 @@ void PlainTextEdit::mousePressEvent(QMouseEvent *event)
 
 void PlainTextEdit::wheelEvent(QWheelEvent *event)
 {
+
     if (QApplication::keyboardModifiers().testFlag(Qt::ControlModifier))
     {
         int zoomLevel = 1;
@@ -95,6 +97,7 @@ void PlainTextEdit::setPlainText(const QString &text)
 
 int PlainTextEdit::lineNumberAreaWidth()
 {
+
     int digits = 1;
     int max = qMax(1, blockCount());
     while (max >= 10)
@@ -145,6 +148,8 @@ void PlainTextEdit::resizeEvent(QResizeEvent *e)
 
 void PlainTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
+    // qDebug() << Q_FUNC_INFO << __LINE__ << ": verticalScrollBar =" << verticalScrollBar()->value();
+
     QPainter painter(lineNumberArea);
     painter.fillRect(event->rect(), QColor(233,233,233));
 

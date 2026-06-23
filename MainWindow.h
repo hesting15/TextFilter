@@ -41,6 +41,8 @@ private slots:
 
     void hideFrameInfo();
     void openRecent();
+    void restoreScrollPosition();
+    void applyRestoredScrollPosition();
 
     void on_plainTextEdit_textChanged();
 
@@ -64,6 +66,7 @@ private:
     void undoToHistoryPoint(int historyPoint);
 
     std::shared_ptr<Document> rootDocument;
+    int mPreFilterTopBlock;
 };
 
 #endif // MAINWINDOW_H

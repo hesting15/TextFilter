@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , rootDocument(nullptr)
+    , mPreFilterTopBlock(0)
 {
     ui->setupUi(this);
 
@@ -87,15 +88,13 @@ void MainWindow::on_lineEditSearch_textChanged(const QString &filter)
     {
         if (rootDocument != nullptr)
         {
-            int savedScrollValue = ui->plainTextEdit->verticalScrollBar()->value();
-            QTextCursor savedCursor = ui->plainTextEdit->textCursor();
-
             undoToHistoryPoint(rootDocument->getUndoHistoryPoint());
             rootDocument.reset();
 
-            ui->plainTextEdit->setTextCursor(savedCursor);
-            ui->plainTextEdit->verticalScrollBar()->setValue(savedScrollValue);
-            ui->plainTextEdit->horizontalScrollBar()->setValue(0);
+            // Defer scroll restore: undo triggers layout/range updates that
+            // Qt processes after this slot returns, which would override setValue.
+            // singleShot(0) fires after those pending events are processed.
+            QTimer::singleShot(0, this, &MainWindow::restoreScrollPosition);
         }
     }
     else
@@ -109,7 +108,6 @@ void MainWindow::on_lineEditSearch_textChanged(const QString &filter)
         {
             rootDocument->applyFilter(filter);
             auto filteredDocument = rootDocument->getFilteredDocument();
-
             ui->plainTextEdit->setTextFromOtherDocument(filteredDocument);
         }
     }
@@ -235,6 +233,30 @@ void MainWindow::hideFrameInfo()
     ui->frameInfo->setVisible(false);
 }
 
+void MainWindow::restoreScrollPosition()
+{
+    QTimer::singleShot(0, this, &MainWindow::applyRestoredScrollPosition);
+}
+
+void MainWindow::applyRestoredScrollPosition()
+{
+    // QPlainTextEdit's vertical scrollbar counts visual rows (wrapped lines),
+    // not blocks. documentLayout()->blockBoundingRect() returns zeros until
+    // blocks are painted, so we count visual rows by walking blocks directly.
+    int visualRow = 0;
+    QTextBlock block = ui->plainTextEdit->document()->begin();
+    while (block.isValid() && block.blockNumber() < mPreFilterTopBlock)
+    {
+        // lineCount() returns the number of visual rows this block occupies
+        // (> 1 when word wrap is on and the line is long)
+        visualRow += qMax(1, block.lineCount());
+        block = block.next();
+    }
+
+    ui->plainTextEdit->verticalScrollBar()->setValue(visualRow);
+    ui->plainTextEdit->horizontalScrollBar()->setValue(0);
+}
+
 void MainWindow::on_toolButtonPrevious_clicked()
 {
     if (rootDocument == nullptr)
@@ -308,6 +330,10 @@ void MainWindow::on_toolButtonSaveFileAs_clicked()
 
 void MainWindow::on_toolButtonFilterText_clicked()
 {
+    // Save the top visible block number before clear() triggers textChanged("")
+    // which calls undoToHistoryPoint and changes the document.
+    // Block numbers are stable across filtered/unfiltered views unlike scrollbar values.
+    mPreFilterTopBlock = ui->plainTextEdit->firstVisibleBlock().blockNumber();
     ui->lineEditSearch->clear();
     ui->lineEditSearch->setFocus();
 }

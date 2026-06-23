@@ -1,6 +1,7 @@
 #ifndef PLAINTEXTEDIT_H
 #define PLAINTEXTEDIT_H
 
+#include "qtextobject.h"
 #include <QPlainTextEdit>
 #include <memory>
 
@@ -23,6 +24,10 @@ public:
     void setDirty(bool isDirty) { mIsDirty = isDirty; }
 
     void updateTabWidth();
+
+    QTextBlock firstVisibleBlock() const { return QPlainTextEdit::firstVisibleBlock(); }
+    QPointF contentOffset() const { return QPlainTextEdit::contentOffset(); }
+    QRectF blockBoundingGeometry(const QTextBlock &block) const { return QPlainTextEdit::blockBoundingGeometry(block); }
 
 protected:
 
