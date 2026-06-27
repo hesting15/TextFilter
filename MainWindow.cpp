@@ -11,6 +11,7 @@
 #include "Settings.h"
 #include "Document.h"
 #include <QTimer>
+#include <QShortcut>
 #include "FileManager.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -33,6 +34,24 @@ MainWindow::MainWindow(QWidget *parent)
     loadLastFile();
 
     ui->lineEditSearch->installEventFilter(this);
+
+    // Wire the built-in X (clear) button inside lineEditSearch to our slot.
+    // clearButtonEnabled is set in the .ui, so the action already exists here.
+    auto* clearAction = ui->lineEditSearch->findChild<QAction*>();
+    if (clearAction)
+    {
+        connect(clearAction,
+                &QAction::triggered,
+                this,
+                &MainWindow::clearFilter);
+    }
+
+    // Ctrl+F shortcut — focuses and clears the filter field.
+    auto* ctrlF = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_F), this);
+    connect(ctrlF,
+            &QShortcut::activated,
+            this,
+            &MainWindow::clearFilter);
 }
 
 MainWindow::~MainWindow()
@@ -328,7 +347,7 @@ void MainWindow::on_toolButtonSaveFileAs_clicked()
     }
 }
 
-void MainWindow::on_toolButtonFilterText_clicked()
+void MainWindow::clearFilter()
 {
     // Save the top visible block number before clear() triggers textChanged("")
     // which calls undoToHistoryPoint and changes the document.
@@ -518,7 +537,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
         if (keyEvent->key() == Qt::Key_Escape)
         {
-            on_toolButtonFilterText_clicked();
+            clearFilter();
             return true; // Mark event as handled (intercepted)
         }
         else if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)

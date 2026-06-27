@@ -29,7 +29,7 @@ private slots:
     void on_toolButtonOpenFile_clicked();
     void on_toolButtonSaveFile_clicked();
     void on_toolButtonSaveFileAs_clicked();
-    void on_toolButtonFilterText_clicked();
+    void clearFilter();
     void on_toolButtonCopyLine_clicked();
     void on_toolButtonCopyMultipleLines_clicked();
     void on_toolButtonAlwaysOnTop_clicked();
