@@ -1,1 +1,9 @@
-*\.pro\.user\.*
+*.pro.user
+*.pro.user.*
+build/
+*.o
+*.obj
+moc_*
+ui_*
+qrc_*
+Makefile

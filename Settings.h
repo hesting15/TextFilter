@@ -5,9 +5,14 @@
 #include <QRect>
 #include <QFont>
 #include <QList>
+#include <QObject>
+#include <QTimer>
 
-class Settings
+// Settings is a QObject so it can own a QTimer for debounced disk writes.
+class Settings : public QObject
 {
+    Q_OBJECT
+
 public:
     static Settings &getInstance()
     {
@@ -15,33 +20,44 @@ public:
         return instance;
     }
 
-    Settings(Settings const&) = delete;
-    Settings(Settings&&) = delete;
+    Settings(Settings const&)            = delete;
+    Settings(Settings&&)                 = delete;
     Settings& operator=(Settings const&) = delete;
-    Settings& operator=(Settings &&) = delete;
+    Settings& operator=(Settings&&)      = delete;
 
-    QString getFilename()                   { return mFilename;        }
-    QFont getFont()                         { return mFont;            }
-    QByteArray getWindowGeometry()          { return mGeometry;        }
-    bool isAlwaysOnTop()                    { return mAlwaysOnTop;     }
-    int getFilterThreshold()                { return mFilterThreshold; }
-    bool isWordWrap()                       { return mWordWrap;        }
-    QStringList getRecentFiles()            { return mRecentFiles;     }
-    QFont::StyleStrategy getStyleStrategy() { return mStyleStrategy;   }
+    // ── Getters ──────────────────────────────────────────────────────────────
+    QString              getFilename()       const { return mFilename;        }
+    QFont                getFont()           const { return mFont;            }
+    QByteArray           getWindowGeometry() const { return mGeometry;        }
+    bool                 isAlwaysOnTop()     const { return mAlwaysOnTop;     }
+    int                  getFilterThreshold()const { return mFilterThreshold; }
+    bool                 isWordWrap()        const { return mWordWrap;        }
+    QStringList          getRecentFiles()    const { return mRecentFiles;     }
+    QFont::StyleStrategy getStyleStrategy()  const { return mStyleStrategy;   }
 
+    // ── Setters (schedule a debounced disk write; never block the UI) ────────
     void setFilename(const QString &filename);
     void setFont(const QFont &font);
     void setWindowGeometry(const QByteArray &geometry);
-    void setAlwaysOnTop(const bool alwaysOnTop);
-    void setFilterThreshold(const int filterThreshold);
-    void setWordWrap(const bool wordWrap);
+    void setAlwaysOnTop(bool alwaysOnTop);
+    void setFilterThreshold(int filterThreshold);
+    void setWordWrap(bool wordWrap);
     void setStyleStrategy(QFont::StyleStrategy strategy);
     void addRecentFile(const QString &filename);
 
-private:
-    Settings();
+    // Force an immediate flush (called on app close).
+    void flushNow();
 
-    void saveSettings();
+private slots:
+    // Connected to mSaveTimer::timeout — actually writes to disk.
+    void flushToDisk();
+
+private:
+    explicit Settings();
+
+    // Schedule a debounced write: resets the timer so rapid successive calls
+    // (e.g. Ctrl+wheel zoom) collapse into a single disk write.
+    void scheduleSave();
 
     QString              mIniPath;
     QString              mFilename;
@@ -52,6 +68,11 @@ private:
     bool                 mWordWrap;
     QFont::StyleStrategy mStyleStrategy;
     QStringList          mRecentFiles;
+
+    // Debounce timer: fires once after the last setter call settles.
+    QTimer               mSaveTimer;
+
+    static constexpr int kSaveDelayMs = 400;
 };
 
 #endif // SETTINGS_H
