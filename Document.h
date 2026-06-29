@@ -97,6 +97,11 @@ private:
     std::map<int, std::vector<HighlightArea>> mHighlightAreas;
 
     int mUndoHistoryPoint;
+
+    // Cache for getFilteredDocument().
+    // Rebuilt only when applyFilter() is called with a new filter string.
+    // Saves one full QTextDocument::clone() per keystroke.
+    std::shared_ptr<QTextDocument> mCachedFilteredDoc;
 };
 
 #endif // DOCUMENT_H

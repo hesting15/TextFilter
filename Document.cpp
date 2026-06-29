@@ -25,6 +25,7 @@ void Document::applyFilter(const QString& filter)
     mFilter = filter;
     mCurrentHighlightedLine = -1;
     mHighlightAreas.clear();
+    mCachedFilteredDoc.reset(); // invalidate — will be rebuilt on next getFilteredDocument()
 
     if (mFilter.isEmpty())
     {
@@ -105,6 +106,11 @@ void Document::removeLine(const QTextBlock& block)
 
 std::shared_ptr<QTextDocument> Document::getFilteredDocument()
 {
+    // Return the cached result if applyFilter() has not been called since
+    // the last build. This avoids one full clone() per keystroke.
+    if (mCachedFilteredDoc)
+        return mCachedFilteredDoc;
+
     std::shared_ptr<QTextDocument> newDocument = cloneDocument();
     bool highlightWholeLine = false;
 
@@ -132,6 +138,7 @@ std::shared_ptr<QTextDocument> Document::getFilteredDocument()
             block = block.previous();
         }
     }
+    mCachedFilteredDoc = newDocument;
     return newDocument;
 }
 
