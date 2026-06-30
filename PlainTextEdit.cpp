@@ -192,6 +192,25 @@ void PlainTextEdit::setTextFromOtherDocument(
     QTextCursor cursor(document());
     cursor.select(QTextCursor::Document);
 
+    // NOTE: we intentionally do NOT early-out on
+    // cursor.selectedText() == otherCursor.selectedText().
+    // selectedText() returns plain text only and ignores character
+    // formatting, so two calls can have identical text but different
+    // highlight colors (e.g. Document::getFullDocumentWithNextLineHighlighted
+    // moving the green "current match" highlight to a different line while
+    // every line's text stays the same). Skipping the rewrite in that case
+    // would silently freeze the highlight on screen. See: bug where pressing
+    // Enter repeatedly did not move the green highlight.
+    //
+    // insertFragment() re-applies content + formatting as a single diff
+    // against the whole document, which Qt treats as a full edit and
+    // triggers a complete relayout + repaint. We keep the in-place rewrite
+    // (rather than swapping to a different QTextDocument*) because the
+    // editor's undo history is tied to this exact document object — see
+    // Document::getUndoHistoryPoint() for why. Disabling updates while the
+    // rewrite happens batches the relayout/repaint into a single pass.
+    setUpdatesEnabled(false);
+
     if (otherCursor.selectedText().isEmpty())
     {
         cursor.removeSelectedText();
@@ -200,6 +219,8 @@ void PlainTextEdit::setTextFromOtherDocument(
     {
         cursor.insertFragment(otherCursor.selection());
     }
+
+    setUpdatesEnabled(true);
 }
 
 
