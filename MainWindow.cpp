@@ -96,8 +96,17 @@ void MainWindow::closeEvent(QCloseEvent *event)
         else if (reply == QMessageBox::Cancel)
         {
             event->ignore();
+            return;
         }
     }
+
+    // Settings::setXxx() only schedules a debounced write (fires ~400ms
+    // later via mSaveTimer). The application can exit before that timer
+    // ever runs, silently dropping every setting changed in this session —
+    // including the saveGeometry() call right above. flushNow() cancels the
+    // pending timer and writes immediately, guaranteeing the final state
+    // reaches disk before the process exits.
+    Settings::getInstance().flushNow();
 }
 
 void MainWindow::undoToHistoryPoint(int historyPoint)
