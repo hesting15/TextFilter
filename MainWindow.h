@@ -3,6 +3,7 @@
 
 #include "Document.h"
 
+#include <QIcon>
 #include <QMainWindow>
 #include <QtWidgets/QAbstractButton>
 
@@ -67,6 +68,23 @@ private:
 
     std::shared_ptr<Document> rootDocument;
     int mPreFilterTopBlock;
+
+    // Icon cache: loaded once (see MainWindow ctor) instead of constructing
+    // a new QIcon from the resource path on every call to
+    // updateSaveAndMenuButtonIcons (which previously fired on every
+    // keystroke via on_plainTextEdit_textChanged).
+    QIcon mIconMenuClean;
+    QIcon mIconMenuChanged;
+    QIcon mIconSaveClean;
+    QIcon mIconSaveChanged;
+
+    // Tracks whether the icons are currently showing the "dirty" state.
+    // updateSaveAndMenuButtonIcons() is a no-op when this already matches
+    // the editor's actual dirty state, so setIcon() is only called on the
+    // keystroke where the dirty flag actually flips, not on every keystroke.
+    // Starts as an impossible/uninitialized-marker value so the very first
+    // call always performs the initial icon assignment.
+    int mLastDirtyState = -1; // -1 = not yet set, 0 = clean, 1 = dirty
 };
 
 #endif // MAINWINDOW_H

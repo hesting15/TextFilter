@@ -22,6 +22,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    // Pre-load icons once. Previously a new QIcon was constructed from the
+    // resource path inside updateSaveAndMenuButtonIcons() on every call,
+    // which fired on every keystroke via on_plainTextEdit_textChanged.
+    mIconMenuClean   = QIcon(":/resources/128x128/menu.png");
+    mIconMenuChanged = QIcon(":/resources/128x128/menu_changed.png");
+    mIconSaveClean   = QIcon(":/resources/128x128/save.png");
+    mIconSaveChanged = QIcon(":/resources/128x128/save_changed.png");
+
     // Hide menu panel
     on_pushButtonMenu_clicked(false);
 
@@ -511,17 +519,21 @@ void MainWindow::openRecent()
 
 void MainWindow::updateSaveAndMenuButtonIcons()
 {
-    QString menuIcon = "menu.png";
-    QString saveIcon = "save.png";
+    const bool dirty = ui->plainTextEdit->isDirty();
 
-    if (ui->plainTextEdit->isDirty())
+    // Guard: skip entirely if the dirty state hasn't changed since the last
+    // call. This is what prevents setIcon() (and previously, QIcon
+    // construction) from running on every single keystroke — only the
+    // keystroke that actually flips clean<->dirty does any work.
+    const int dirtyState = dirty ? 1 : 0;
+    if (dirtyState == mLastDirtyState)
     {
-        menuIcon = "menu_changed.png";
-        saveIcon = "save_changed.png";
+        return;
     }
+    mLastDirtyState = dirtyState;
 
-    setIconMultipleResolutions(ui->pushButtonMenu,     menuIcon);
-    setIconMultipleResolutions(ui->toolButtonSaveFile, saveIcon);
+    ui->pushButtonMenu->setIcon    (dirty ? mIconMenuChanged : mIconMenuClean);
+    ui->toolButtonSaveFile->setIcon(dirty ? mIconSaveChanged : mIconSaveClean);
 }
 
 void MainWindow::setIconMultipleResolutions(QAbstractButton *button, const QString& iconName)
